@@ -771,11 +771,9 @@ function ejecutarExport() {
     r.cargado ? 'Sí' : 'No',
     'Enviado a Contabilidad',
     r.fechaCreacion ? new Date(r.fechaCreacion).toLocaleDateString('es-ES') : ''
-  ].map(v => '"' + String(v||'').replace(/"/g, '""') + '"').join(sep));
+  ].map(v => '"' + String(v||"").replace(/"/g, '\"\"') + '"').join(sep));
 
-  const nl  = '
-';
-  const csv = BOM + headers.map(h => '"' + h + '"').join(sep) + nl + csvRows.join(nl);
+  const csv = BOM + headers.map(q).join(sep) + '\n' + csvRows.join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
