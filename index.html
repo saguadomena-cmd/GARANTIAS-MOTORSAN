@@ -830,20 +830,22 @@ function ejecutarExport() {
 
   const toExport = records.filter(r => selected.includes(r.id));
 
-  // Build CSV
-  const BOM = '﻿';
+  const BOM = '\uFEFF';
   const sep = ';';
-  const headers = ['Referencia Pieza','Denominación','Nº Pedido','Fecha Pedido','Nº Factura','Fecha Factura','Nº Orden','Archivo','Centro','Cargado en Orden','Estado','Fecha Creación'];
-  const csvRows = toExport.map(r => [
-    r.referencia, r.denominacion, r.numPedido, fmtDate(r.fechaPedido),
-    r.numFactura, fmtDate(r.fechaFactura), r.numOrden, r.archivo||'',
-    r.centro === 'guadalajara' ? 'Guadalajara' : 'Alcalá',
-    r.cargado ? 'Sí' : 'No',
-    'Enviado a Contabilidad',
-    r.fechaCreacion ? new Date(r.fechaCreacion).toLocaleDateString('es-ES') : ''
-  ].map(v => '"' + String(v||"").replace(/"/g, '\"\"') + '"').join(sep));
-
-  const csv = BOM + headers.map(q).join(sep) + '\n' + csvRows.join('\n');
+  function qv(v) { return '"' + String(v||'').replace(/"/g, '""') + '"'; }
+  const headers = ['Referencia','Denominacion','N Pedido','Fecha Pedido','N Factura','Fecha Factura','N Orden','Archivo','Centro','Cargado Orden','WALLS','Estado','Fecha Creacion'];
+  const csvRows = toExport.map(function(r) {
+    return [
+      r.referencia||'', r.denominacion||'', r.numPedido||'', fmtDate(r.fechaPedido),
+      r.numFactura||'', fmtDate(r.fechaFactura), r.numOrden||'', r.archivo||'',
+      r.centro === 'guadalajara' ? 'Guadalajara' : 'Alcala',
+      r.cargado ? 'Si' : 'No',
+      r.walls ? 'Si' : 'No',
+      'Enviado Contabilidad',
+      r.fechaCreacion ? new Date(r.fechaCreacion).toLocaleDateString('es-ES') : ''
+    ].map(qv).join(sep);
+  });
+  const csv = BOM + headers.map(qv).join(sep) + '\n' + csvRows.join('\n');
   const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url  = URL.createObjectURL(blob);
   const a    = document.createElement('a');
@@ -853,13 +855,17 @@ function ejecutarExport() {
   a.click();
   URL.revokeObjectURL(url);
 
-  // Mark as sent
-  selected.forEach(id => {
+  selected.forEach(function(id) {
     const idx = records.findIndex(r => r.id === id);
     if (idx !== -1) {
       records[idx].enviado      = true;
       records[idx].fechaEnviado = new Date().toISOString();
     }
+  });
+  saveLocal();
+  cerrarExport();
+  toast('\u2705 ' + selected.length + ' registro' + (selected.length>1?'s':'') + ' exportado' + (selected.length>1?'s':'') + ' y marcados como enviados \u2713', 'success', 5000);
+}
   });
 
   saveLocal();
