@@ -6,8 +6,6 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Garantías · MOTORSAN v1.0</title>
 <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@500;600;700&display=swap" rel="stylesheet">
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" crossorigin="anonymous"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js" crossorigin="anonymous"></script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -401,13 +399,23 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 // ══════════════════════════════════════════════════════════════════
 // FIREBASE CONFIG — MOTORSAN GARANTÍAS
 // ══════════════════════════════════════════════════════════════════
-const FIREBASE_URL    = 'https://accesorios-alcala-default-rtdb.europe-west1.firebasedatabase.app';
-const FIREBASE_APIKEY = 'AIzaSyDApTnRdr3LLFowFDzbu_WfDF4teKT75Wo';
-const DB_PATH = 'garantias'; // separate path from accesorios
 
-let fbDb       = null;
-let useFirebase = false;
-let records    = [];
+let fbDb        = null;
+let useFirebase  = false;
+let records      = [];
+const LOCAL_KEY  = 'motorsan_garantias_v1';
+
+function saveLocal() {
+  localStorage.setItem(LOCAL_KEY, JSON.stringify(records));
+  renderTabla();
+  updateStats();
+}
+
+function loadLocal() {
+  try { records = JSON.parse(localStorage.getItem(LOCAL_KEY) || '[]'); } catch { records = []; }
+  renderTabla();
+  updateStats();
+}
 let editingId  = null;
 let sortField  = 'fechaPedido';
 let sortDir    = -1;
@@ -430,25 +438,9 @@ function toast(msg, type='info', dur=3500) {
 
 // ── FIREBASE ──
 function initFirebase() {
-  try {
-    if (firebase.apps.length) firebase.apps.forEach(a => a.delete());
-    firebase.initializeApp({ apiKey: FIREBASE_APIKEY, databaseURL: FIREBASE_URL, projectId: 'accesorios-alcala' });
-    fbDb = firebase.database();
-    fbDb.ref('.info/connected').on('value', snap => {
-      useFirebase = !!snap.val();
-      document.title = snap.val()
-        ? 'Garantías · MOTORSAN v1.0 ✓'
-        : 'Garantías · MOTORSAN v1.0 (offline)';
-    });
-    fbDb.ref(DB_PATH).on('value', snap => {
-      const data = snap.val();
-      records = data ? Object.values(data) : [];
-      renderTabla();
-      updateStats();
-    }, err => toast('Error Firebase: ' + err.message, 'error'));
-  } catch(e) {
-    toast('Error conectando Firebase: ' + e.message, 'error');
-  }
+  // Modo local — sin Firebase
+  loadLocal();
+  document.title = 'Garantías · MOTORSAN v1.0';
 }
 
 // ── FORMAT DATE ──
@@ -513,6 +505,7 @@ function guardarRegistro() {
   const numFactura   = document.getElementById('f_numFactura').value.trim();
   const fechaFactura = document.getElementById('f_fechaFactura').value;
   const numOrden     = document.getElementById('f_numOrden').value.trim();
+  const archivo      = document.getElementById('f_archivo').value.trim();
   const centro       = document.getElementById('f_centro').value;
   const cargado      = document.getElementById('f_cargado').value === '1';
 
@@ -526,16 +519,10 @@ function guardarRegistro() {
     enviado: false, fechaCreacion: new Date().toISOString()
   };
 
-  if (useFirebase && fbDb) {
-    fbDb.ref(DB_PATH + '/' + rec.id).set(rec)
-      .then(() => { toast('✅ Registro guardado ✓', 'success'); limpiarForm(); })
-      .catch(err => toast('Error: ' + err.message, 'error'));
-  } else {
-    records.unshift(rec);
-    renderTabla(); updateStats();
-    toast('✅ Registro guardado (local) ✓', 'success');
-    limpiarForm();
-  }
+  records.unshift(rec);
+  saveLocal();
+  toast('✅ Registro guardado ✓', 'success');
+  limpiarForm();
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -633,23 +620,15 @@ function toggleCargadoReg(id) {
   if (idx === -1) return;
   records[idx].cargado = !records[idx].cargado;
   const val = records[idx].cargado;
-  if (useFirebase && fbDb) {
-    fbDb.ref(DB_PATH + '/' + id + '/cargado').set(val)
-      .catch(err => toast('Error: ' + err.message, 'error'));
-  } else { renderTabla(); updateStats(); }
+  saveLocal();
   toast(val ? '✓ Marcado como cargado en orden' : 'Desmarcado de orden', 'info');
 }
 
 // ── DELETE ──
 function eliminarRegistro(id) {
   if (!confirm('¿Eliminar este registro de garantía?')) return;
-  if (useFirebase && fbDb) {
-    fbDb.ref(DB_PATH + '/' + id).remove()
-      .catch(err => toast('Error: ' + err.message, 'error'));
-  } else {
-    records = records.filter(r => r.id !== id);
-    renderTabla(); updateStats();
-  }
+  records = records.filter(r => r.id !== id);
+  saveLocal();
   toast('Registro eliminado', 'info');
 }
 
@@ -699,11 +678,9 @@ function guardarEdit() {
   if (!updated.denominacion) { toast('La denominación es obligatoria', 'error'); return; }
 
   records[idx] = updated;
-  if (useFirebase && fbDb) {
-    fbDb.ref(DB_PATH + '/' + editingId).set(updated)
-      .then(() => toast('✅ Cambios guardados ✓', 'success'))
-      .catch(err => toast('Error: ' + err.message, 'error'));
-  } else { renderTabla(); updateStats(); toast('✅ Cambios guardados ✓', 'success'); }
+  records[idx] = updated;
+  saveLocal();
+  toast('✅ Cambios guardados ✓', 'success');
   cerrarEdit();
 }
 
@@ -784,22 +761,15 @@ function ejecutarExport() {
   URL.revokeObjectURL(url);
 
   // Mark as sent
-  const updates = {};
   selected.forEach(id => {
     const idx = records.findIndex(r => r.id === id);
     if (idx !== -1) {
-      records[idx].enviado       = true;
-      records[idx].fechaEnviado  = new Date().toISOString();
-      if (useFirebase && fbDb) {
-        updates[DB_PATH + '/' + id + '/enviado']      = true;
-        updates[DB_PATH + '/' + id + '/fechaEnviado'] = records[idx].fechaEnviado;
-      }
+      records[idx].enviado      = true;
+      records[idx].fechaEnviado = new Date().toISOString();
     }
   });
 
-  if (useFirebase && fbDb && Object.keys(updates).length) {
-    fbDb.ref().update(updates).catch(err => toast('Error marcando enviados: ' + err.message, 'error'));
-  } else { renderTabla(); updateStats(); }
+  saveLocal();
 
   cerrarExport();
   toast(`✅ ${selected.length} registro${selected.length>1?'s':''} exportado${selected.length>1?'s':''} y marcados como enviados a Contabilidad ✓`, 'success', 5000);
