@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
+<!-- saved from url=(0053)https://saguadomena-cmd.github.io/GARANTIAS-MOTORSAN/ -->
+<html lang="es"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>Garantías · MOTORSAN v1.0</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Source+Code+Pro:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="./Garantías · MOTORSAN v1.0_files/css2" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -201,10 +201,10 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
   <div class="header-brand">
     <div class="header-logo">
       <svg width="32" height="20" viewBox="0 0 88 28" fill="none">
-        <circle cx="14" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"/>
-        <circle cx="36" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"/>
-        <circle cx="58" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"/>
-        <circle cx="80" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"/>
+        <circle cx="14" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"></circle>
+        <circle cx="36" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"></circle>
+        <circle cx="58" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"></circle>
+        <circle cx="80" cy="14" r="12.5" stroke="white" stroke-width="2" fill="none" opacity=".7"></circle>
       </svg>
     </div>
     <div>
@@ -213,10 +213,10 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
     </div>
   </div>
   <div class="header-stats">
-    <div class="hstat"><div class="hstat-val" id="statTotal">0</div><div class="hstat-lbl">Total</div></div>
+    <div class="hstat"><div class="hstat-val" id="statTotal">21</div><div class="hstat-lbl">Total</div></div>
     <div class="hstat orange"><div class="hstat-val" id="statPendiente">0</div><div class="hstat-lbl">Sin cargar</div></div>
     <div class="hstat green"><div class="hstat-val" id="statCargado">0</div><div class="hstat-lbl">En orden</div></div>
-    <div class="hstat purple"><div class="hstat-val" id="statEnviado">0</div><div class="hstat-lbl">Enviados</div></div>
+    <div class="hstat purple"><div class="hstat-val" id="statEnviado">21</div><div class="hstat-lbl">Enviados</div></div>
   </div>
 </div>
 
@@ -289,13 +289,13 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
       <div class="qr-section">
         <div class="qr-label">⚡ Referencias rápidas — pulsa para rellenar el campo Referencia</div>
         <div class="qr-btns" id="qrBtns">
-          <button class="qr-btn" onclick="usarRefRapida('8P0898201A')"><span class="qr-dot"></span>8P0898201A</button>
-          <button class="qr-btn" onclick="usarRefRapida('8R0898201C')"><span class="qr-dot"></span>8R0898201C</button>
-          <button class="qr-btn" onclick="usarRefRapida('6V0898201')"><span class="qr-dot"></span>6V0898201</button>
-          <button class="qr-btn" onclick="usarRefRapida('6V0898201A')"><span class="qr-dot"></span>6V0898201A</button>
-          <button class="qr-btn" onclick="usarRefRapida('6V0898201B')"><span class="qr-dot"></span>6V0898201B</button>
-          <button class="qr-btn" onclick="usarRefRapida('4F0880204J')"><span class="qr-dot"></span>4F0880204J</button>
-          <button class="qr-btn" onclick="usarRefRapida('8E1880204G')"><span class="qr-dot"></span>8E1880204G</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;8P0898201A&#39;)"><span class="qr-dot"></span>8P0898201A</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;8R0898201C&#39;)"><span class="qr-dot"></span>8R0898201C</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;6V0898201&#39;)"><span class="qr-dot"></span>6V0898201</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;6V0898201A&#39;)"><span class="qr-dot"></span>6V0898201A</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;6V0898201B&#39;)"><span class="qr-dot"></span>6V0898201B</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;4F0880204J&#39;)"><span class="qr-dot"></span>4F0880204J</button>
+          <button class="qr-btn" onclick="usarRefRapida(&#39;8E1880204G&#39;)"><span class="qr-dot"></span>8E1880204G</button>
         </div>
       </div>
 
@@ -313,10 +313,10 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         <span class="search-ico">🔍</span>
         <input type="text" id="searchInput" placeholder="Buscar referencia, pedido, factura…" oninput="renderTabla()">
       </div>
-      <button class="filter-btn active" id="f-all"       onclick="setFilter('all')">Todos</button>
-      <button class="filter-btn f-pending" id="f-pending" onclick="setFilter('pending')">Sin cargar</button>
-      <button class="filter-btn f-loaded"  id="f-loaded"  onclick="setFilter('loaded')">En orden</button>
-      <button class="filter-btn f-sent"    id="f-sent"    onclick="setFilter('sent')">Enviados a contabilidad</button>
+      <button class="filter-btn active" id="f-all" onclick="setFilter(&#39;all&#39;)">Todos</button>
+      <button class="filter-btn f-pending" id="f-pending" onclick="setFilter(&#39;pending&#39;)">Sin cargar</button>
+      <button class="filter-btn f-loaded" id="f-loaded" onclick="setFilter(&#39;loaded&#39;)">En orden</button>
+      <button class="filter-btn f-sent" id="f-sent" onclick="setFilter(&#39;sent&#39;)">Enviados a contabilidad</button>
     </div>
     <button class="export-btn" onclick="abrirExportModal()">📊 Exportar a Excel</button>
   </div>
@@ -328,24 +328,652 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         <thead>
           <tr>
             <th style="width:36px"></th>
-            <th onclick="sortBy('referencia')">REFERENCIA</th>
-            <th onclick="sortBy('denominacion')" style="min-width:180px">DENOMINACIÓN</th>
-            <th onclick="sortBy('numPedido')">Nº PEDIDO</th>
-            <th onclick="sortBy('fechaPedido')">F. PEDIDO</th>
-            <th onclick="sortBy('numFactura')">Nº FACTURA</th>
-            <th onclick="sortBy('fechaFactura')">F. FACTURA</th>
-            <th onclick="sortBy('numOrden')">Nº ORDEN</th>
-            <th onclick="sortBy('archivo')">ARCHIVO</th>
-            <th onclick="sortBy('centro')">CENTRO</th>
+            <th onclick="sortBy(&#39;referencia&#39;)">REFERENCIA</th>
+            <th onclick="sortBy(&#39;denominacion&#39;)" style="min-width:180px">DENOMINACIÓN</th>
+            <th onclick="sortBy(&#39;numPedido&#39;)">Nº PEDIDO</th>
+            <th onclick="sortBy(&#39;fechaPedido&#39;)">F. PEDIDO</th>
+            <th onclick="sortBy(&#39;numFactura&#39;)">Nº FACTURA</th>
+            <th onclick="sortBy(&#39;fechaFactura&#39;)">F. FACTURA</th>
+            <th onclick="sortBy(&#39;numOrden&#39;)">Nº ORDEN</th>
+            <th onclick="sortBy(&#39;archivo&#39;)">ARCHIVO</th>
+            <th onclick="sortBy(&#39;centro&#39;)">CENTRO</th>
             <th>CARGADO EN ORDEN</th>
             <th>WALLS</th>
             <th>ESTADO</th>
             <th style="width:90px">ACCIONES</th>
           </tr>
         </thead>
-        <tbody id="tableBody">
-          <tr><td colspan="14" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
-        </tbody>
+        <tbody id="tableBody"><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sekonwv93n" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2484318</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">21/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">678207</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">21/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601333</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118341</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sekonwv93n&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sekonwv93n&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sekonwv93n&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sekonwv93n&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6stkvkvp917" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2489355</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">679004</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">22/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601426</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118369</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6stkvkvp917&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6stkvkvp917&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6stkvkvp917&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6stkvkvp917&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6srisf04f1k" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2556432</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">688075</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">12/05/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601421</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118810</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6srisf04f1k&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6srisf04f1k&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6srisf04f1k&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6srisf04f1k&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sqqzb4hdiz" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2581625</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">689038</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">13/05/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601410</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118948</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sqqzb4hdiz&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sqqzb4hdiz&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sqqzb4hdiz&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sqqzb4hdiz&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sq3lzujh3a" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2481704</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">678206</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">21/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601407</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118324</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sq3lzujh3a&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sq3lzujh3a&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sq3lzujh3a&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sq3lzujh3a&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sp72708x0s" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2511140</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">681578</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">28/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601391</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118523</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sp72708x0s&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sp72708x0s&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sp72708x0s&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sp72708x0s&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sm91z9p1ho" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8R0898201C</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2490270</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">682029</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">29/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601437</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118370</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sm91z9p1ho&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sm91z9p1ho&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sm91z9p1ho&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sm91z9p1ho&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6skfpzkwmd7" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8R0898201C</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2515629</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">683368</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">01/05/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601415</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118346</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6skfpzkwmd7&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6skfpzkwmd7&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6skfpzkwmd7&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6skfpzkwmd7&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sibyf9ht5w" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2515309</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">683369</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">01/05/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601454</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118534</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sibyf9ht5w&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sibyf9ht5w&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sibyf9ht5w&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sibyf9ht5w&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sheenl1oka" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8R0898201C</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2494680</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">682030</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">29/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601387</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118414</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sheenl1oka&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sheenl1oka&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sheenl1oka&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sheenl1oka&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sglw9l1u5b" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2484415</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">678209</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">21/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601344</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118322</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sglw9l1u5b&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sglw9l1u5b&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sglw9l1u5b&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sglw9l1u5b&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6sfvsvoxw52" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2499561</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">679718</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">23/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601432</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118450</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6sfvsvoxw52&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6sfvsvoxw52&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6sfvsvoxw52&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6sfvsvoxw52&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6s9qk76i3a3" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2417025</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">671336</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">07/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601143</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#117891</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6s9qk76i3a3&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6s9qk76i3a3&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6s9qk76i3a3&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6s9qk76i3a3&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6s8tef48ouu" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2425951</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">672261</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">09/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601129</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#117729</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6s8tef48ouu&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6s8tef48ouu&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6s8tef48ouu&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6s8tef48ouu&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6s7yxzlw4xd" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2235192</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">653329</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">26/02/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601232</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#116913</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6s7yxzlw4xd&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6s7yxzlw4xd&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6s7yxzlw4xd&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6s7yxzlw4xd&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6s6srr9s5p7" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2440199</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">673633</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">11/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601233</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118074</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6s6srr9s5p7&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6s6srr9s5p7&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6s6srr9s5p7&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6s6srr9s5p7&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6s5oevisrbt" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2469171</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">676710</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">17/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601274</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118220</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6s5oevisrbt&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6s5oevisrbt&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6s5oevisrbt&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6s5oevisrbt&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6ro0uv0hzht" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2501743</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">680362</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">24/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601286</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118228</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6ro0uv0hzht&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6ro0uv0hzht&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6ro0uv0hzht&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6ro0uv0hzht&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6rmwjzkvxin" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8R0898201C</span></td>
+      <td style="max-width:220px;word-break:break-word">AIRBAG</td>
+      <td><span class="mono-cell">2495505</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">682668</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">30/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601293</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118231</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6rmwjzkvxin&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6rmwjzkvxin&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6rmwjzkvxin&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6rmwjzkvxin&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6qsizrck3q9" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">airbag</td>
+      <td><span class="mono-cell">2515309</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">683369</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">01/05/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601454</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118534</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6qsizrck3q9&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6qsizrck3q9&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6qsizrck3q9&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6qsizrck3q9&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr><tr class="exported">
+      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="mp6qb3cu3tw10" onchange="updateExportCount()"></div></td>
+      <td><span class="ref-cell">8P0898201A</span></td>
+      <td style="max-width:220px;word-break:break-word">airbag</td>
+      <td><span class="mono-cell">2489800</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">—</td>
+      <td><span class="mono-cell" style="font-size:.73rem">679005</span></td>
+      <td style="font-size:.75rem;white-space:nowrap">22/04/2026</td>
+      <td><span class="mono-cell" style="font-size:.73rem">OA2601458</span></td>
+      <td><span class="mono-cell" style="font-size:.73rem">#118383</span></td>
+      <td><span class="badge" style="background:#e8f0fc;color:#0057a8;border:1px solid #b8d0f0">🏢 Alcalá</span></td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" onclick="toggleCargadoReg(&#39;mp6qb3cu3tw10&#39;)"></button>
+          <span class="tog-lbl">Sí</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog on" style="background:var(--sent)" onclick="toggleWallsReg(&#39;mp6qb3cu3tw10&#39;)"></button>
+          <span class="tog-lbl" style="color:var(--sent)">Sí</span>
+        </div>
+      </td>
+      <td><span class="badge badge-sent">✈️ Enviado contabilidad</span></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit(&#39;mp6qb3cu3tw10&#39;)" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro(&#39;mp6qb3cu3tw10&#39;)" title="Eliminar">🗑️</button>
+        </div>
+      </td>
+    </tr></tbody>
       </table>
     </div>
   </div>
@@ -427,9 +1055,177 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
     <label class="export-select-all" onclick="toggleSelectAll()">
       <input type="checkbox" id="chkSelectAll"> Seleccionar todos los visibles
     </label>
-    <div class="export-list" id="exportList"></div>
+    <div class="export-list" id="exportList">
+    <label class="export-item selected" id="eitem_mp6sekonwv93n">
+      <input type="checkbox" class="exp-cb" data-id="mp6sekonwv93n" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2484318</div>
+        <div class="export-item-sub">AIRBAG · Factura: 678207 · Orden: OA2601333</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6stkvkvp917">
+      <input type="checkbox" class="exp-cb" data-id="mp6stkvkvp917" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2489355</div>
+        <div class="export-item-sub">AIRBAG · Factura: 679004 · Orden: OA2601426</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6srisf04f1k">
+      <input type="checkbox" class="exp-cb" data-id="mp6srisf04f1k" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2556432</div>
+        <div class="export-item-sub">AIRBAG · Factura: 688075 · Orden: OA2601421</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sqqzb4hdiz">
+      <input type="checkbox" class="exp-cb" data-id="mp6sqqzb4hdiz" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2581625</div>
+        <div class="export-item-sub">AIRBAG · Factura: 689038 · Orden: OA2601410</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sq3lzujh3a">
+      <input type="checkbox" class="exp-cb" data-id="mp6sq3lzujh3a" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2481704</div>
+        <div class="export-item-sub">AIRBAG · Factura: 678206 · Orden: OA2601407</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sp72708x0s">
+      <input type="checkbox" class="exp-cb" data-id="mp6sp72708x0s" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2511140</div>
+        <div class="export-item-sub">AIRBAG · Factura: 681578 · Orden: OA2601391</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sm91z9p1ho">
+      <input type="checkbox" class="exp-cb" data-id="mp6sm91z9p1ho" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8R0898201C · 2490270</div>
+        <div class="export-item-sub">AIRBAG · Factura: 682029 · Orden: OA2601437</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6skfpzkwmd7">
+      <input type="checkbox" class="exp-cb" data-id="mp6skfpzkwmd7" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8R0898201C · 2515629</div>
+        <div class="export-item-sub">AIRBAG · Factura: 683368 · Orden: OA2601415</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sibyf9ht5w">
+      <input type="checkbox" class="exp-cb" data-id="mp6sibyf9ht5w" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2515309</div>
+        <div class="export-item-sub">AIRBAG · Factura: 683369 · Orden: OA2601454</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sheenl1oka">
+      <input type="checkbox" class="exp-cb" data-id="mp6sheenl1oka" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8R0898201C · 2494680</div>
+        <div class="export-item-sub">AIRBAG · Factura: 682030 · Orden: OA2601387</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sglw9l1u5b">
+      <input type="checkbox" class="exp-cb" data-id="mp6sglw9l1u5b" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2484415</div>
+        <div class="export-item-sub">AIRBAG · Factura: 678209 · Orden: OA2601344</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6sfvsvoxw52">
+      <input type="checkbox" class="exp-cb" data-id="mp6sfvsvoxw52" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2499561</div>
+        <div class="export-item-sub">AIRBAG · Factura: 679718 · Orden: OA2601432</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6s9qk76i3a3">
+      <input type="checkbox" class="exp-cb" data-id="mp6s9qk76i3a3" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2417025</div>
+        <div class="export-item-sub">AIRBAG · Factura: 671336 · Orden: OA2601143</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6s8tef48ouu">
+      <input type="checkbox" class="exp-cb" data-id="mp6s8tef48ouu" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2425951</div>
+        <div class="export-item-sub">AIRBAG · Factura: 672261 · Orden: OA2601129</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6s7yxzlw4xd">
+      <input type="checkbox" class="exp-cb" data-id="mp6s7yxzlw4xd" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2235192</div>
+        <div class="export-item-sub">AIRBAG · Factura: 653329 · Orden: OA2601232</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6s6srr9s5p7">
+      <input type="checkbox" class="exp-cb" data-id="mp6s6srr9s5p7" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2440199</div>
+        <div class="export-item-sub">AIRBAG · Factura: 673633 · Orden: OA2601233</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6s5oevisrbt">
+      <input type="checkbox" class="exp-cb" data-id="mp6s5oevisrbt" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2469171</div>
+        <div class="export-item-sub">AIRBAG · Factura: 676710 · Orden: OA2601274</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6ro0uv0hzht">
+      <input type="checkbox" class="exp-cb" data-id="mp6ro0uv0hzht" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2501743</div>
+        <div class="export-item-sub">AIRBAG · Factura: 680362 · Orden: OA2601286</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6rmwjzkvxin">
+      <input type="checkbox" class="exp-cb" data-id="mp6rmwjzkvxin" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8R0898201C · 2495505</div>
+        <div class="export-item-sub">AIRBAG · Factura: 682668 · Orden: OA2601293</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6qsizrck3q9">
+      <input type="checkbox" class="exp-cb" data-id="mp6qsizrck3q9" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2515309</div>
+        <div class="export-item-sub">airbag · Factura: 683369 · Orden: OA2601454</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label>
+    <label class="export-item selected" id="eitem_mp6qb3cu3tw10">
+      <input type="checkbox" class="exp-cb" data-id="mp6qb3cu3tw10" onchange="updateExportModal()">
+      <div class="export-item-info">
+        <div class="export-item-num">8P0898201A · 2489800</div>
+        <div class="export-item-sub">airbag · Factura: 679005 · Orden: OA2601458</div>
+      </div>
+      <div class="export-item-badge"><span class="badge badge-loaded">En orden</span></div>
+    </label></div>
     <div class="export-actions">
-      <span class="export-count" id="exportCount">0 seleccionados</span>
+      <span class="export-count" id="exportCount">21 seleccionados</span>
       <div style="display:flex;gap:8px">
         <button class="btn btn-ghost" onclick="cerrarExport()">Cancelar</button>
         <button class="btn btn-green" onclick="ejecutarExport()">📥 Exportar y marcar enviados</button>
@@ -900,5 +1696,5 @@ document.getElementById('editModal').addEventListener('click', e => {
   if (e.target === document.getElementById('editModal')) cerrarEdit();
 });
 </script>
-</body>
-</html>
+
+</body></html>
