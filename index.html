@@ -65,6 +65,10 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .cargado-toggle.active .ct-dot::after{transform:translateX(16px)}
 .cargado-toggle .ct-lbl{font-size:.82rem;font-weight:600;color:var(--muted);transition:color .2s}
 .cargado-toggle.active .ct-lbl{color:var(--green)}
+.cargado-toggle.active-walls{border-color:var(--sent)!important;background:var(--sent-bg)}
+.cargado-toggle.active-walls .ct-dot{background:var(--sent)}
+.cargado-toggle.active-walls .ct-dot::after{transform:translateX(16px)}
+.cargado-toggle.active-walls .ct-lbl{color:var(--sent)}
 
 .form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px;padding-top:14px;border-top:1px solid var(--border)}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:8px 18px;border-radius:var(--rs);border:none;font-family:var(--font);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .15s}
@@ -170,6 +174,18 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 .toast.error{border-left:3px solid var(--red)}
 .toast.info{border-left:3px solid #60a5fa}
 
+/* ── REFS RÁPIDAS ── */
+.qr-section{margin-top:14px;padding-top:14px;border-top:1px solid var(--border)}
+.qr-label{font-size:.65rem;text-transform:uppercase;letter-spacing:.09em;font-weight:600;color:var(--muted);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.qr-label::after{content:"";flex:1;height:1px;background:var(--border)}
+.qr-btns{display:flex;flex-wrap:wrap;gap:6px}
+.qr-btn{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--rs);border:1.5px solid var(--border2);background:var(--surface2);font-family:var(--mono);font-size:.78rem;font-weight:600;color:var(--text2);cursor:pointer;transition:all .15s;user-select:none;letter-spacing:.03em}
+.qr-btn:hover{border-color:var(--blue);color:var(--blue);background:var(--blue-bg)}
+.qr-btn.used{border-color:var(--green);color:var(--green);background:var(--green-bg)}
+.qr-btn .qr-dot{width:7px;height:7px;border-radius:50%;background:var(--border2);flex-shrink:0;transition:background .15s}
+.qr-btn.used .qr-dot{background:var(--green)}
+.qr-btn:hover .qr-dot{background:var(--blue)}
+
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .form-grid{grid-template-columns:1fr 1fr}
@@ -216,7 +232,7 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
       <div class="form-grid">
         <div class="field">
           <label>📦 Referencia pieza</label>
-          <input type="text" id="f_referencia" class="mono" placeholder="8U0-061-109" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="f_referencia" class="mono" placeholder="8U0-061-109" autocomplete="off" oninput="this.value=this.value.toUpperCase();actualizarQRBtns()">
         </div>
         <div class="field" style="grid-column:span 2">
           <label>📝 Denominación</label>
@@ -261,7 +277,28 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
           </div>
           <input type="hidden" id="f_cargado" value="0">
         </div>
+        <div class="field">
+          <label>🔄 Cambiado en WALLS</label>
+          <div class="cargado-toggle" id="f_wallsToggle" onclick="toggleWallsForm()" style="border-color:#7c3aed">
+            <div class="ct-dot"></div>
+            <span class="ct-lbl">No cambiado</span>
+          </div>
+          <input type="hidden" id="f_walls" value="0">
+        </div>
       </div>
+      <div class="qr-section">
+        <div class="qr-label">⚡ Referencias rápidas — pulsa para rellenar el campo Referencia</div>
+        <div class="qr-btns" id="qrBtns">
+          <button class="qr-btn" onclick="usarRefRapida('8P0898201A')"><span class="qr-dot"></span>8P0898201A</button>
+          <button class="qr-btn" onclick="usarRefRapida('8R0898201C')"><span class="qr-dot"></span>8R0898201C</button>
+          <button class="qr-btn" onclick="usarRefRapida('6V0898201')"><span class="qr-dot"></span>6V0898201</button>
+          <button class="qr-btn" onclick="usarRefRapida('6V0898201A')"><span class="qr-dot"></span>6V0898201A</button>
+          <button class="qr-btn" onclick="usarRefRapida('6V0898201B')"><span class="qr-dot"></span>6V0898201B</button>
+          <button class="qr-btn" onclick="usarRefRapida('4F0880204J')"><span class="qr-dot"></span>4F0880204J</button>
+          <button class="qr-btn" onclick="usarRefRapida('8E1880204G')"><span class="qr-dot"></span>8E1880204G</button>
+        </div>
+      </div>
+
       <div class="form-actions">
         <button class="btn btn-ghost" onclick="limpiarForm()">Limpiar</button>
         <button class="btn btn-primary" onclick="guardarRegistro()">💾 Guardar registro</button>
@@ -301,12 +338,13 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <th onclick="sortBy('archivo')">ARCHIVO</th>
             <th onclick="sortBy('centro')">CENTRO</th>
             <th>CARGADO EN ORDEN</th>
+            <th>WALLS</th>
             <th>ESTADO</th>
             <th style="width:90px">ACCIONES</th>
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="13" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
+          <tr><td colspan="14" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
         </tbody>
       </table>
     </div>
@@ -364,6 +402,14 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
           <span class="ct-lbl">No cargado</span>
         </div>
         <input type="hidden" id="e_cargado" value="0">
+      </div>
+      <div class="field">
+        <label>🔄 Cambiado en WALLS</label>
+        <div class="cargado-toggle" id="e_wallsToggle" onclick="toggleWallsEdit()" style="border-color:#7c3aed">
+          <div class="ct-dot"></div>
+          <span class="ct-lbl">No cambiado</span>
+        </div>
+        <input type="hidden" id="e_walls" value="0">
       </div>
     </div>
     <div class="modal-actions">
@@ -469,6 +515,31 @@ function toggleCargadoForm() {
   document.getElementById('f_cargado').value = formCargado ? '1' : '0';
 }
 
+let formWalls = false;
+function toggleWallsForm() {
+  formWalls = !formWalls;
+  const tog = document.getElementById('f_wallsToggle');
+  tog.classList.toggle('active-walls', formWalls);
+  tog.querySelector('.ct-lbl').textContent = formWalls ? 'Cambiado en WALLS ✓' : 'No cambiado';
+  document.getElementById('f_walls').value = formWalls ? '1' : '0';
+}
+
+let editWalls = false;
+function toggleWallsEdit() {
+  editWalls = !editWalls;
+  const tog = document.getElementById('e_wallsToggle');
+  tog.classList.toggle('active-walls', editWalls);
+  tog.querySelector('.ct-lbl').textContent = editWalls ? 'Cambiado en WALLS ✓' : 'No cambiado';
+  document.getElementById('e_walls').value = editWalls ? '1' : '0';
+}
+function setWallsEdit(val) {
+  editWalls = !!val;
+  const tog = document.getElementById('e_wallsToggle');
+  tog.classList.toggle('active-walls', editWalls);
+  tog.querySelector('.ct-lbl').textContent = editWalls ? 'Cambiado en WALLS ✓' : 'No cambiado';
+  document.getElementById('e_walls').value = editWalls ? '1' : '0';
+}
+
 function toggleCargadoEdit() {
   editCargado = !editCargado;
   const tog = document.getElementById('e_cargadoToggle');
@@ -495,6 +566,11 @@ function limpiarForm() {
   tog.classList.remove('active');
   tog.querySelector('.ct-lbl').textContent = 'No cargado';
   document.getElementById('f_cargado').value = '0';
+  actualizarQRBtns();
+  formWalls = false;
+  const wt = document.getElementById('f_wallsToggle');
+  if (wt) { wt.classList.remove('active-walls'); wt.querySelector('.ct-lbl').textContent = 'No cambiado'; }
+  document.getElementById('f_walls').value = '0';
 }
 
 function guardarRegistro() {
@@ -513,9 +589,10 @@ function guardarRegistro() {
   if (!denominacion) { toast('Introduce la denominación', 'error'); return; }
   if (!numPedido)    { toast('Introduce el número de pedido', 'error'); return; }
 
+  const walls = document.getElementById('f_walls').value === '1';
   const rec = {
     id: uid(), referencia, denominacion, numPedido, fechaPedido,
-    numFactura, fechaFactura, numOrden, archivo, centro, cargado,
+    numFactura, fechaFactura, numOrden, archivo, centro, cargado, walls,
     enviado: false, fechaCreacion: new Date().toISOString()
   };
 
@@ -569,7 +646,7 @@ function renderTabla() {
   const rows  = getFiltered();
   const tbody = document.getElementById('tableBody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="13" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(r => {
@@ -595,6 +672,12 @@ function renderTabla() {
           <span class="tog-lbl">${r.cargado?'Sí':'No'}</span>
         </div>
       </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog ${r.walls?'on':''}" style="${r.walls?'background:var(--sent)':''}" onclick="toggleWallsReg('${r.id}')"></button>
+          <span class="tog-lbl" style="${r.walls?'color:var(--sent)':''}">${r.walls?'Sí':'No'}</span>
+        </div>
+      </td>
       <td>${estadoBadge}</td>
       <td>
         <div style="display:flex;gap:4px">
@@ -615,6 +698,14 @@ function updateStats() {
 }
 
 // ── TOGGLE CARGADO EN TABLA ──
+function toggleWallsReg(id) {
+  const idx = records.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  records[idx].walls = !records[idx].walls;
+  saveLocal();
+  toast(records[idx].walls ? '🔄 Marcado como cambiado en WALLS' : 'Desmarcado de WALLS', 'info');
+}
+
 function toggleCargadoReg(id) {
   const idx = records.findIndex(r => r.id === id);
   if (idx === -1) return;
@@ -649,6 +740,7 @@ function abrirEdit(id) {
   document.getElementById('e_archivo').value     = r.archivo      || '';
   document.getElementById('e_centro').value       = r.centro       || 'alcala';
   setCargadoEdit(r.cargado);
+  setWallsEdit(r.walls);
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -673,6 +765,7 @@ function guardarEdit() {
     archivo:      document.getElementById('e_archivo').value.trim(),
     centro:       document.getElementById('e_centro').value,
     cargado:      document.getElementById('e_cargado').value === '1',
+    walls:        document.getElementById('e_walls').value === '1',
   };
   if (!updated.referencia)   { toast('La referencia es obligatoria', 'error'); return; }
   if (!updated.denominacion) { toast('La denominación es obligatoria', 'error'); return; }
@@ -777,6 +870,25 @@ function ejecutarExport() {
 
 // ── UPDATE EXPORT COUNT from table checkboxes ──
 function updateExportCount() {}
+
+// ══════════════════════════════════════════════════════════════════
+// REFS RÁPIDAS
+// ══════════════════════════════════════════════════════════════════
+function usarRefRapida(ref) {
+  const campo = document.getElementById('f_referencia');
+  campo.value = ref;
+  campo.focus();
+  // Actualizar estado visual de todos los botones
+  actualizarQRBtns();
+}
+
+function actualizarQRBtns() {
+  const actual = document.getElementById('f_referencia').value.trim().toUpperCase();
+  document.querySelectorAll('.qr-btn').forEach(btn => {
+    const ref = btn.querySelector('.qr-dot').nextSibling.textContent.trim();
+    btn.classList.toggle('used', ref === actual);
+  });
+}
 
 // ══════════════════════════════════════════════════════════════════
 // INIT
