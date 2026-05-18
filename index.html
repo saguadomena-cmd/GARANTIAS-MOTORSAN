@@ -95,6 +95,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 .filter-btn.active{border-color:var(--blue);background:var(--blue-bg);color:var(--blue)}
 .filter-btn.f-pending.active{border-color:var(--orange);background:var(--orange-bg);color:var(--orange)}
 .filter-btn.f-sent.active{border-color:var(--sent);background:var(--sent-bg);color:var(--sent)}
+.filter-btn#f-recibido.active{border-color:#7c3aed;background:#f5f3ff;color:#7c3aed}
 .filter-btn.f-loaded.active{border-color:var(--green);background:var(--green-bg);color:var(--green)}
 
 /* ── EXPORT BUTTON ── */
@@ -188,6 +189,26 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 .qr-btn.used .qr-dot{background:var(--green)}
 .qr-btn:hover .qr-dot{background:var(--blue)}
 
+/* ── MULTI-REF TAGS ── */
+.ref-tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.ref-tag{display:inline-flex;align-items:center;gap:4px;background:#eef3fc;border:1.5px solid #b8d0f0;border-radius:4px;padding:3px 8px;font-family:var(--mono);font-size:.76rem;font-weight:600;color:#1a3a6e}
+.ref-tag .rtx{background:none;border:none;color:#bb0a21;cursor:pointer;font-size:11px;padding:0;line-height:1;margin-left:2px}
+.ref-tag .rtx:hover{color:#9b0018}
+.tag-input-wrap{display:flex;gap:6px;align-items:center}
+.tag-input-wrap input{flex:1;padding:8px 11px;border-radius:var(--rs);border:1.5px solid var(--border2);font-family:var(--mono);font-size:.82rem;color:var(--text);outline:none;background:var(--surface2);transition:border-color .15s;text-transform:uppercase}
+.tag-input-wrap input:focus{border-color:var(--blue);background:#fff}
+.tag-add-btn{padding:8px 12px;border-radius:var(--rs);border:1.5px solid var(--blue);background:var(--blue-bg);color:var(--blue);font-size:.78rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s}
+.tag-add-btn:hover{background:var(--blue);color:#fff}
+
+/* ── DUPLICADO WARNING ── */
+.dup-warn{display:none;align-items:center;gap:8px;background:#fff8ec;border:1px solid #f0c060;border-radius:var(--rs);padding:7px 12px;margin-top:6px;font-size:.75rem;color:#c47200;font-weight:500}
+.dup-warn.show{display:flex}
+.dup-warn strong{color:#bb0a21;cursor:pointer;text-decoration:underline}
+
+/* ── RECIBIDO color ── */
+.tog.recibido{background:var(--sent)}
+.tog.recibido::after{transform:translateX(14px)}
+
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .form-grid{grid-template-columns:1fr 1fr}
@@ -232,9 +253,16 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
     </div>
     <div class="form-body" id="formBody">
       <div class="form-grid">
-        <div class="field">
-          <label>📦 Referencia pieza</label>
-          <input type="text" id="f_referencia" class="mono" placeholder="8U0-061-109" autocomplete="off" oninput="this.value=this.value.toUpperCase();actualizarQRBtns()">
+        <div class="field" style="grid-column:span 2">
+          <label>📦 Referencias de piezas <span style="font-size:.65rem;color:var(--muted);font-weight:400">(puedes añadir varias)</span></label>
+          <div class="tag-input-wrap">
+            <input type="text" id="f_refInput" class="mono" placeholder="Escribe referencia y pulsa + o Enter" autocomplete="off"
+              oninput="this.value=this.value.toUpperCase();actualizarQRBtns()"
+              onkeydown="if(event.key==='Enter'){event.preventDefault();addRefTag()}">
+            <button class="tag-add-btn" onclick="addRefTag()">+ Añadir</button>
+          </div>
+          <div class="ref-tags" id="f_refTags"></div>
+          <div class="dup-warn" id="dupWarnOrden">⚠️ <span id="dupWarnMsg">Ya existe un registro con este dato</span> — <strong onclick="scrollToDup()">Ver registro existente</strong></div>
         </div>
         <div class="field" style="grid-column:span 2">
           <label>📝 Denominación</label>
@@ -258,11 +286,11 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         </div>
         <div class="field">
           <label>📋 Nº de Orden</label>
-          <input type="text" id="f_numOrden" class="mono" placeholder="OT-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="f_numOrden" class="mono" placeholder="OT-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase();checkDuplicate('numOrden',this.value)">
         </div>
         <div class="field">
           <label>🗂️ Archivo</label>
-          <input type="text" id="f_archivo" class="mono" placeholder="ARQ-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          <input type="text" id="f_archivo" class="mono" placeholder="ARQ-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase();checkDuplicate('archivo',this.value)">
         </div>
         <div class="field">
           <label>🏢 Centro</label>
@@ -286,6 +314,14 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <span class="ct-lbl">No cambiado</span>
           </div>
           <input type="hidden" id="f_walls" value="0">
+        </div>
+        <div class="field">
+          <label>📬 Recibido</label>
+          <div class="cargado-toggle" id="f_recibidoToggle" onclick="toggleRecibidoForm()" style="border-color:#7c3aed">
+            <div class="ct-dot"></div>
+            <span class="ct-lbl">No recibido</span>
+          </div>
+          <input type="hidden" id="f_recibido" value="0">
         </div>
       </div>
       <div class="qr-section">
@@ -319,6 +355,7 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
       <button class="filter-btn f-pending" id="f-pending" onclick="setFilter('pending')">Sin cargar</button>
       <button class="filter-btn f-loaded"  id="f-loaded"  onclick="setFilter('loaded')">En orden</button>
       <button class="filter-btn f-sent"    id="f-sent"    onclick="setFilter('sent')">Enviados a contabilidad</button>
+      <button class="filter-btn" id="f-recibido" onclick="setFilter('recibido')" style="--active-color:#7c3aed">Recibido</button>
     </div>
     <button class="export-btn" onclick="abrirExportModal()">📊 Exportar a Excel</button>
   </div>
@@ -341,12 +378,13 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <th onclick="sortBy('centro')">CENTRO</th>
             <th>CARGADO EN ORDEN</th>
             <th>WALLS</th>
+            <th>RECIBIDO</th>
             <th>ESTADO</th>
             <th style="width:90px">ACCIONES</th>
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="14" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
+          <tr><td colspan="15" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
         </tbody>
       </table>
     </div>
@@ -412,6 +450,14 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
           <span class="ct-lbl">No cambiado</span>
         </div>
         <input type="hidden" id="e_walls" value="0">
+      </div>
+      <div class="field">
+        <label>📬 Recibido</label>
+        <div class="cargado-toggle" id="e_recibidoToggle" onclick="toggleRecibidoEdit()" style="border-color:#7c3aed">
+          <div class="ct-dot"></div>
+          <span class="ct-lbl">No recibido</span>
+        </div>
+        <input type="hidden" id="e_recibido" value="0">
       </div>
     </div>
     <div class="modal-actions">
@@ -648,11 +694,18 @@ function limpiarForm() {
   tog.classList.remove('active');
   tog.querySelector('.ct-lbl').textContent = 'No cargado';
   document.getElementById('f_cargado').value = '0';
+  formRefs = [];
+  renderRefTags();
   actualizarQRBtns();
   formWalls = false;
   const wt = document.getElementById('f_wallsToggle');
   if (wt) { wt.classList.remove('active-walls'); wt.querySelector('.ct-lbl').textContent = 'No cambiado'; }
   document.getElementById('f_walls').value = '0';
+  formRecibido = false;
+  const rt = document.getElementById('f_recibidoToggle');
+  if (rt) { rt.classList.remove('active-walls'); rt.querySelector('.ct-lbl').textContent = 'No recibido'; }
+  document.getElementById('f_recibido').value = '0';
+  document.getElementById('dupWarnOrden').classList.remove('show');
 }
 
 function guardarRegistro() {
@@ -667,14 +720,16 @@ function guardarRegistro() {
   const centro       = document.getElementById('f_centro').value;
   const cargado      = document.getElementById('f_cargado').value === '1';
 
-  if (!referencia)   { toast('Introduce la referencia de la pieza', 'error'); return; }
+  if (!formRefs.length) { toast('Añade al menos una referencia de pieza', 'error'); return; }
   if (!denominacion) { toast('Introduce la denominación', 'error'); return; }
   if (!numPedido)    { toast('Introduce el número de pedido', 'error'); return; }
 
-  const walls = document.getElementById('f_walls').value === '1';
+  const walls    = document.getElementById('f_walls').value === '1';
+  const recibido = document.getElementById('f_recibido').value === '1';
   const rec = {
-    id: uid(), referencia, denominacion, numPedido, fechaPedido,
-    numFactura, fechaFactura, numOrden, archivo, centro, cargado, walls,
+    id: uid(), referencias: [...formRefs], referencia: formRefs[0]||'',
+    denominacion, numPedido, fechaPedido,
+    numFactura, fechaFactura, numOrden, archivo, centro, cargado, walls, recibido,
     enviado: false, fechaCreacion: new Date().toISOString()
   };
 
@@ -688,7 +743,7 @@ function guardarRegistro() {
 // ══════════════════════════════════════════════════════════════════
 function setFilter(f) {
   activeFilter = f;
-  ['all','pending','loaded','sent'].forEach(x => {
+  ['all','pending','loaded','sent','recibido'].forEach(x => {
     const el = document.getElementById('f-' + x);
     if (el) el.classList.toggle('active', x === f);
   });
@@ -706,9 +761,11 @@ function getFiltered() {
   return records.filter(r => {
     if (activeFilter === 'pending' && (r.cargado || r.enviado)) return false;
     if (activeFilter === 'loaded'  && (!r.cargado || r.enviado)) return false;
-    if (activeFilter === 'sent'    && !r.enviado) return false;
+    if (activeFilter === 'sent'     && !r.enviado) return false;
+    if (activeFilter === 'recibido' && !r.recibido) return false;
     if (q) {
-      const hay = [r.referencia,r.denominacion,r.numPedido,r.numFactura,r.numOrden].join(' ').toLowerCase();
+      const refs = Array.isArray(r.referencias) ? r.referencias.join(' ') : (r.referencia||'');
+      const hay = [refs,r.denominacion,r.numPedido,r.numFactura,r.numOrden,r.archivo].join(' ').toLowerCase();
       if (!hay.includes(q)) return false;
     }
     return true;
@@ -727,7 +784,7 @@ function renderTabla() {
   const rows  = getFiltered();
   const tbody = document.getElementById('tableBody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="14" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="15" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(r => {
@@ -738,7 +795,7 @@ function renderTabla() {
         : '<span class="badge badge-pending">⏳ Sin cargar</span>';
     return `<tr class="${r.enviado ? 'exported' : ''}">
       <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="${r.id}" onchange="updateExportCount()"></div></td>
-      <td><span class="ref-cell">${esc(r.referencia||'—')}</span></td>
+      <td>${(Array.isArray(r.referencias)?r.referencias:[r.referencia||'']).map(ref=>'<span class="ref-cell" style="display:inline-block;margin:1px 2px">'+esc(ref)+'</span>').join('')}</td>
       <td style="max-width:220px;word-break:break-word">${esc(r.denominacion||'—')}</td>
       <td><span class="mono-cell">${esc(r.numPedido||'—')}</span></td>
       <td style="font-size:.75rem;white-space:nowrap">${fmtDate(r.fechaPedido)}</td>
@@ -757,6 +814,12 @@ function renderTabla() {
         <div class="tog-wrap">
           <button class="tog ${r.walls?'on':''}" style="${r.walls?'background:var(--sent)':''}" onclick="toggleWallsReg('${r.id}')"></button>
           <span class="tog-lbl" style="${r.walls?'color:var(--sent)':''}">${r.walls?'Sí':'No'}</span>
+        </div>
+      </td>
+      <td>
+        <div class="tog-wrap">
+          <button class="tog ${r.recibido?'on':''}" style="${r.recibido?'background:#7c3aed':''}" onclick="toggleRecibidoReg('${r.id}')"></button>
+          <span class="tog-lbl" style="${r.recibido?'color:#7c3aed':''}">${r.recibido?'Sí':'No'}</span>
         </div>
       </td>
       <td>${estadoBadge}</td>
@@ -823,6 +886,7 @@ function abrirEdit(id) {
   document.getElementById('e_centro').value       = r.centro       || 'alcala';
   setCargadoEdit(r.cargado);
   setWallsEdit(r.walls);
+  setRecibidoEdit(r.recibido);
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -848,6 +912,7 @@ function guardarEdit() {
     centro:       document.getElementById('e_centro').value,
     cargado:      document.getElementById('e_cargado').value === '1',
     walls:        document.getElementById('e_walls').value === '1',
+    recibido:     document.getElementById('e_recibido').value === '1',
   };
   if (!updated.referencia)   { toast('La referencia es obligatoria', 'error'); return; }
   if (!updated.denominacion) { toast('La denominación es obligatoria', 'error'); return; }
@@ -915,14 +980,15 @@ function ejecutarExport() {
   const BOM = '\uFEFF';
   const sep = ';';
   function qv(v) { return '"' + String(v||'').replace(/"/g, '""') + '"'; }
-  const headers = ['Referencia','Denominacion','N Pedido','Fecha Pedido','N Factura','Fecha Factura','N Orden','Archivo','Centro','Cargado Orden','WALLS','Estado','Fecha Creacion'];
+  const headers = ['Referencias','Denominacion','N Pedido','Fecha Pedido','N Factura','Fecha Factura','N Orden','Archivo','Centro','Cargado Orden','WALLS','Recibido','Estado','Fecha Creacion'];
   const csvRows = toExport.map(function(r) {
     return [
-      r.referencia||'', r.denominacion||'', r.numPedido||'', fmtDate(r.fechaPedido),
+      (Array.isArray(r.referencias)?r.referencias.join(' / '):(r.referencia||'')), r.denominacion||'', r.numPedido||'', fmtDate(r.fechaPedido),
       r.numFactura||'', fmtDate(r.fechaFactura), r.numOrden||'', r.archivo||'',
       r.centro === 'guadalajara' ? 'Guadalajara' : 'Alcala',
       r.cargado ? 'Si' : 'No',
       r.walls ? 'Si' : 'No',
+      r.recibido ? 'Si' : 'No',
       'Enviado Contabilidad',
       r.fechaCreacion ? new Date(r.fechaCreacion).toLocaleDateString('es-ES') : ''
     ].map(qv).join(sep);
@@ -957,21 +1023,123 @@ function ejecutarExport() {
 function updateExportCount() {}
 
 // ══════════════════════════════════════════════════════════════════
+// MULTI-REF TAGS
+// ══════════════════════════════════════════════════════════════════
+let formRefs = [];
+
+function addRefTag() {
+  const inp = document.getElementById('f_refInput');
+  const val = inp.value.trim().toUpperCase();
+  if (!val) return;
+  if (formRefs.includes(val)) { toast('Esta referencia ya está añadida', 'error'); return; }
+  formRefs.push(val);
+  inp.value = '';
+  renderRefTags();
+  actualizarQRBtns();
+}
+
+function removeRefTag(ref) {
+  formRefs = formRefs.filter(r => r !== ref);
+  renderRefTags();
+}
+
+function renderRefTags() {
+  const container = document.getElementById('f_refTags');
+  if (!container) return;
+  container.innerHTML = formRefs.map(r =>
+    '<span class="ref-tag">' + esc(r) + '<button class="rtx" onclick="removeRefTag('' + r + '')">✕</button></span>'
+  ).join('');
+}
+
+// ── DUPLICADO DETECTION ──
+let dupScrollId = null;
+function checkDuplicate(field, value) {
+  if (!value) return false;
+  const v = value.trim().toUpperCase();
+  const found = records.find(r => {
+    if (field === 'numOrden')   return (r.numOrden||'').toUpperCase() === v;
+    if (field === 'archivo')    return (r.archivo||'').toUpperCase() === v;
+    if (field === 'numFactura') return (r.numFactura||'').toUpperCase() === v;
+    return false;
+  });
+  const warn = document.getElementById('dupWarnOrden');
+  if (found) {
+    dupScrollId = found.id;
+    document.getElementById('dupWarnMsg').textContent = 'Ya existe un registro con este ' + field + ' (' + esc(found.numOrden || found.archivo || found.numFactura || '') + ')';
+    warn.classList.add('show');
+    return true;
+  } else {
+    warn.classList.remove('show');
+    return false;
+  }
+}
+
+function scrollToDup() {
+  if (!dupScrollId) return;
+  document.getElementById('searchInput').value = '';
+  setFilter('all');
+  renderTabla();
+  setTimeout(() => {
+    const rows = document.querySelectorAll('#tableBody tr');
+    rows.forEach(row => {
+      if (row.innerHTML.includes(dupScrollId)) {
+        row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        row.style.background = '#fff8ec';
+        setTimeout(() => row.style.background = '', 2000);
+      }
+    });
+  }, 300);
+}
+
+// ── RECIBIDO TOGGLE ──
+let formRecibido = false;
+function toggleRecibidoForm() {
+  formRecibido = !formRecibido;
+  const tog = document.getElementById('f_recibidoToggle');
+  tog.classList.toggle('active-walls', formRecibido);
+  tog.querySelector('.ct-lbl').textContent = formRecibido ? 'Recibido ✓' : 'No recibido';
+  document.getElementById('f_recibido').value = formRecibido ? '1' : '0';
+}
+let editRecibido = false;
+function toggleRecibidoEdit() {
+  editRecibido = !editRecibido;
+  const tog = document.getElementById('e_recibidoToggle');
+  tog.classList.toggle('active-walls', editRecibido);
+  tog.querySelector('.ct-lbl').textContent = editRecibido ? 'Recibido ✓' : 'No recibido';
+  document.getElementById('e_recibido').value = editRecibido ? '1' : '0';
+}
+function setRecibidoEdit(val) {
+  editRecibido = !!val;
+  const tog = document.getElementById('e_recibidoToggle');
+  tog.classList.toggle('active-walls', editRecibido);
+  tog.querySelector('.ct-lbl').textContent = editRecibido ? 'Recibido ✓' : 'No recibido';
+  document.getElementById('e_recibido').value = editRecibido ? '1' : '0';
+}
+function toggleRecibidoReg(id) {
+  const idx = records.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  records[idx].recibido = !records[idx].recibido;
+  updateField(id, 'recibido', records[idx].recibido);
+  renderTabla(); updateStats();
+  toast(records[idx].recibido ? '📬 Marcado como recibido' : 'Desmarcado de recibido', 'info');
+}
+
+// ══════════════════════════════════════════════════════════════════
 // REFS RÁPIDAS
 // ══════════════════════════════════════════════════════════════════
 function usarRefRapida(ref) {
-  const campo = document.getElementById('f_referencia');
-  campo.value = ref;
-  campo.focus();
-  // Actualizar estado visual de todos los botones
+  if (!formRefs.includes(ref)) {
+    formRefs.push(ref);
+    renderRefTags();
+    toast(ref + ' añadida ✓', 'info', 1500);
+  }
   actualizarQRBtns();
 }
 
 function actualizarQRBtns() {
-  const actual = document.getElementById('f_referencia').value.trim().toUpperCase();
   document.querySelectorAll('.qr-btn').forEach(btn => {
     const ref = btn.querySelector('.qr-dot').nextSibling.textContent.trim();
-    btn.classList.toggle('used', ref === actual);
+    btn.classList.toggle('used', formRefs.includes(ref));
   });
 }
 
