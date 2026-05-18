@@ -1046,9 +1046,9 @@ function removeRefTag(ref) {
 function renderRefTags() {
   const container = document.getElementById('f_refTags');
   if (!container) return;
-  container.innerHTML = formRefs.map(r =>
-    '<span class="ref-tag">' + esc(r) + '<button class="rtx" onclick="removeRefTag('' + r + '')">✕</button></span>'
-  ).join('');
+  container.innerHTML = formRefs.map(function(r) {
+    return '<span class="ref-tag">' + esc(r) + '<button class="rtx" onclick="removeRefTag(' + JSON.stringify(r) + ')">✕</button></span>';
+  }).join('');
 }
 
 // ── DUPLICADO DETECTION ──
