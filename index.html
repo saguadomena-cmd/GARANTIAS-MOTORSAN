@@ -105,7 +105,15 @@ body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:1
 /* ── TABLE ── */
 .table-card{background:var(--surface);border-radius:var(--r);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden}
 .table-wrap{overflow-x:auto}
+.scroll-top{overflow-x:auto;overflow-y:hidden;height:12px;margin-bottom:2px}
+.scroll-top-inner{height:1px}
 table{width:100%;border-collapse:collapse;font-size:.78rem}
+.sticky-col{position:sticky;left:0;z-index:2;background:#fff}
+.sticky-col2{position:sticky;left:36px;z-index:2;background:#fff}
+tr:hover .sticky-col, tr:hover .sticky-col2{background:#f8f9fb}
+tr.exported .sticky-col, tr.exported .sticky-col2{background:#faf5ff}
+th.sticky-col{background:linear-gradient(135deg,#1a1d23,#2d3748)!important;z-index:3}
+th.sticky-col2{background:linear-gradient(135deg,#1a1d23,#2d3748)!important;z-index:3}
 th{padding:9px 10px;text-align:left;font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:rgba(255,255,255,.7);font-weight:600;white-space:nowrap;background:linear-gradient(135deg,#1a1d23,#2d3748);cursor:pointer;user-select:none;border-right:1px solid rgba(255,255,255,.08)}
 th:last-child{border-right:none}
 th:hover{background:rgba(255,255,255,.1)}
@@ -373,7 +381,10 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
   </div>
 
   <!-- TABLE -->
-  <div class="table-card">
+  <div class="scroll-top" id="scrollTop">
+  <div class="scroll-top-inner" id="scrollTopInner"></div>
+</div>
+<div class="table-card">
     <div class="table-wrap">
       <table>
         <thead>
@@ -833,8 +844,8 @@ function renderTabla() {
         ? '<span class="badge badge-loaded">✓ En orden</span>'
         : '<span class="badge badge-pending">⏳ Sin cargar</span>';
     return `<tr class="${r.enviado ? 'exported' : ''}">
-      <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="${r.id}" onchange="updateExportCount()"></div></td>
-      <td>
+      <td class="sticky-col"><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="${r.id}" onchange="updateExportCount()"></div></td>
+      <td class="sticky-col2">
         <div style="display:flex;gap:4px">
           <button class="act-btn" onclick="abrirEdit('${r.id}')" title="Editar">✏️</button>
           <button class="act-btn danger" onclick="eliminarRegistro('${r.id}')" title="Eliminar">🗑️</button>
@@ -1191,6 +1202,37 @@ function actualizarQRBtns() {
 initFirebase();
 renderTabla();
 updateStats();
+
+// ── DUAL SCROLL SYNC ──
+(function() {
+  function initDualScroll() {
+    const top    = document.getElementById('scrollTop');
+    const bottom = document.querySelector('.table-wrap');
+    const inner  = document.getElementById('scrollTopInner');
+    if (!top || !bottom || !inner) return;
+
+    // Set inner width to match table
+    function syncWidth() {
+      inner.style.width = bottom.scrollWidth + 'px';
+    }
+    syncWidth();
+    new ResizeObserver(syncWidth).observe(bottom);
+
+    // Sync scroll positions
+    top.addEventListener('scroll', () => { bottom.scrollLeft = top.scrollLeft; });
+    bottom.addEventListener('scroll', () => { top.scrollLeft = bottom.scrollLeft; });
+  }
+  // Init after render
+  setTimeout(initDualScroll, 500);
+  // Re-init after each render
+  const origRender = window.renderTabla;
+  if (origRender) {
+    window.renderTabla = function() {
+      origRender.apply(this, arguments);
+      setTimeout(initDualScroll, 100);
+    };
+  }
+})();
 
 // Close modals on background click
 document.getElementById('editModal').addEventListener('click', e => {
