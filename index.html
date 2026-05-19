@@ -834,6 +834,12 @@ function renderTabla() {
         : '<span class="badge badge-pending">⏳ Sin cargar</span>';
     return `<tr class="${r.enviado ? 'exported' : ''}">
       <td><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="${r.id}" onchange="updateExportCount()"></div></td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="act-btn" onclick="abrirEdit('${r.id}')" title="Editar">✏️</button>
+          <button class="act-btn danger" onclick="eliminarRegistro('${r.id}')" title="Eliminar">🗑️</button>
+        </div>
+      </td>
       <td>${(Array.isArray(r.referencias)?r.referencias:[r.referencia||'']).map(ref=>'<span class="ref-cell" style="display:inline-block;margin:1px 2px">'+esc(ref)+'</span>').join('')}</td>
       <td style="max-width:220px;word-break:break-word">${esc(r.denominacion||'—')}</td>
       <td><span class="mono-cell">${esc(r.numPedido||'—')}</span></td>
@@ -863,12 +869,6 @@ function renderTabla() {
         </div>
       </td>
       <td>${estadoBadge}</td>
-      <td>
-        <div style="display:flex;gap:4px">
-          <button class="act-btn" onclick="abrirEdit('${r.id}')" title="Editar">✏️</button>
-          <button class="act-btn danger" onclick="eliminarRegistro('${r.id}')" title="Eliminar">🗑️</button>
-        </div>
-      </td>
     </tr>`;
   }).join('');
 }
