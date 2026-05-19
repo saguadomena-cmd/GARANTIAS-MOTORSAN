@@ -651,8 +651,13 @@ function fmtDate(d) {
   return new Date(d + 'T00:00').toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
 }
 
-function citaBadge(d) {
+function citaBadge(d, cargado) {
   if (!d) return '<span class="cita-none">Sin cita</span>';
+  // Si ya está cargado en orden, la cita está gestionada — mostrar neutral
+  if (cargado) {
+    const str = new Date(d + 'T00:00').toLocaleDateString('es-ES', { day:'2-digit', month:'2-digit', year:'numeric' });
+    return '<span class="cita-ok">✓ ' + str + '</span>';
+  }
   const today = new Date(); today.setHours(0,0,0,0);
   const cita  = new Date(d + 'T00:00');
   const diff  = Math.round((cita - today) / 86400000);
@@ -859,7 +864,7 @@ function renderTabla() {
       <td style="font-size:.75rem;white-space:nowrap">${fmtDate(r.fechaFactura)}</td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.numOrden||'—')}</span></td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.archivo||'—')}</span></td>
-      <td>${citaBadge(r.fechaCita)}</td>
+      <td>${citaBadge(r.fechaCita, r.cargado)}</td>
       <td>${centroPill(r.centro)}</td>
       <td>
         <div class="tog-wrap">
