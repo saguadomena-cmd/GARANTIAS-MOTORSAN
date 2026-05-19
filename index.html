@@ -389,26 +389,24 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
       <table>
         <thead>
           <tr>
-            <th style="width:36px"></th>
+            <th style="width:30px" class="sticky-col"></th>
+            <th style="width:70px" class="sticky-col2">ACCIONES</th>
             <th onclick="sortBy('referencia')">REFERENCIA</th>
-            <th onclick="sortBy('denominacion')" style="min-width:180px">DENOMINACIÓN</th>
+            <th onclick="sortBy('denominacion')" style="min-width:160px">DENOMINACIÓN</th>
             <th onclick="sortBy('numPedido')">Nº PEDIDO</th>
             <th onclick="sortBy('fechaPedido')">F. PEDIDO</th>
             <th onclick="sortBy('numFactura')">Nº FACTURA</th>
-            <th onclick="sortBy('fechaFactura')">F. FACTURA</th>
             <th onclick="sortBy('numOrden')">Nº ORDEN</th>
             <th onclick="sortBy('archivo')">ARCHIVO</th>
             <th onclick="sortBy('fechaCita')">CITA</th>
-            <th onclick="sortBy('centro')">CENTRO</th>
-            <th>CARGADO EN ORDEN</th>
+            <th>CARGADO</th>
             <th>WALLS</th>
             <th>RECIBIDO</th>
             <th>ESTADO</th>
-            <th style="width:90px">ACCIONES</th>
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="16" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
+          <tr><td colspan="14" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
         </tbody>
       </table>
     </div>
@@ -839,7 +837,7 @@ function renderTabla() {
   const rows  = getFiltered();
   const tbody = document.getElementById('tableBody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="16" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="14" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(r => {
@@ -861,11 +859,9 @@ function renderTabla() {
       <td><span class="mono-cell">${esc(r.numPedido||'—')}</span></td>
       <td style="font-size:.75rem;white-space:nowrap">${fmtDate(r.fechaPedido)}</td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.numFactura||'—')}</span></td>
-      <td style="font-size:.75rem;white-space:nowrap">${fmtDate(r.fechaFactura)}</td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.numOrden||'—')}</span></td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.archivo||'—')}</span></td>
       <td>${citaBadge(r.fechaCita, r.cargado)}</td>
-      <td>${centroPill(r.centro)}</td>
       <td>
         <div class="tog-wrap">
           <button class="tog ${r.cargado?'on':''}" onclick="toggleCargadoReg('${r.id}')"></button>
