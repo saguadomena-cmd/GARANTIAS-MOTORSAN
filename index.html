@@ -709,7 +709,15 @@ function limpiarForm() {
 }
 
 function guardarRegistro() {
-  const referencia   = document.getElementById('f_referencia').value.trim();
+  // También acepta texto en el input aunque no se haya pulsado Añadir
+  const inputRef = document.getElementById('f_refInput');
+  if (inputRef && inputRef.value.trim()) {
+    const val = inputRef.value.trim().toUpperCase();
+    if (!formRefs.includes(val)) formRefs.push(val);
+    inputRef.value = '';
+    renderRefTags();
+  }
+
   const denominacion = document.getElementById('f_denominacion').value.trim();
   const numPedido    = document.getElementById('f_numPedido').value.trim();
   const fechaPedido  = document.getElementById('f_fechaPedido').value;
