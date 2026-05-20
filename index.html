@@ -225,6 +225,33 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 @keyframes pulse-orange{0%,100%{opacity:1}50%{opacity:.5}}
 @keyframes pulse-red{0%,100%{opacity:1}50%{opacity:.4}}
 
+/* ── TIPO SELECTOR ── */
+.tipo-selector-bar{display:flex;align-items:center;gap:0;border-radius:var(--r) var(--r) 0 0;overflow:hidden}
+.tipo-tab{flex:1;padding:13px 20px;font-family:var(--font);font-size:.82rem;font-weight:700;border:none;cursor:pointer;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;letter-spacing:.03em;opacity:.65}
+.tipo-tab:hover{opacity:.85}
+.tipo-tab.active{opacity:1}
+.tipo-tab.t-garantia{background:linear-gradient(135deg,#1a1d23,#2d3748);color:#fff}
+.tipo-tab.t-canje{background:linear-gradient(135deg,#1a5e2a,#2d8a3e);color:#fff}
+.tipo-tab.t-reclamacion{background:linear-gradient(135deg,#7c1a1a,#b52a2a);color:#fff}
+.tipo-tab.t-garantia:not(.active){background:#2d3748;opacity:.5}
+.tipo-tab.t-canje:not(.active){background:#2d8a3e;opacity:.5}
+.tipo-tab.t-reclamacion:not(.active){background:#b52a2a;opacity:.5}
+
+/* Form card header por tipo */
+.form-card-hdr.hdr-garantia{background:linear-gradient(135deg,#1a1d23,#2d3748)}
+.form-card-hdr.hdr-canje{background:linear-gradient(135deg,#1a5e2a,#2d8a3e)}
+.form-card-hdr.hdr-reclamacion{background:linear-gradient(135deg,#7c1a1a,#b52a2a)}
+
+/* Header stats por tipo */
+.header.tipo-garantia{background:linear-gradient(135deg,#1a1d23 0%,#2d3748 100%)}
+.header.tipo-canje{background:linear-gradient(135deg,#1a5e2a 0%,#2d8a3e 100%)}
+.header.tipo-reclamacion{background:linear-gradient(135deg,#7c1a1a 0%,#b52a2a 100%)}
+
+/* Tipo badge en tabla */
+.badge-garantia{background:#eef3fc;color:#1a3a6e;border:1px solid #b8d0f0;display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:.62rem;font-weight:700}
+.badge-canje{background:#eaf5ef;color:#1a5e2a;border:1px solid #b2dfc9;display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:.62rem;font-weight:700}
+.badge-reclamacion{background:#fff0f0;color:#7c1a1a;border:1px solid #f0c0c5;display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:.62rem;font-weight:700}
+
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .form-grid{grid-template-columns:1fr 1fr}
@@ -263,8 +290,13 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 
   <!-- FORM NUEVO REGISTRO -->
   <div class="form-card">
-    <div class="form-card-hdr">
-      <h2>➕ Nuevo registro de garantía</h2>
+    <div class="tipo-selector-bar">
+      <button class="tipo-tab t-garantia active" id="tab-garantia" onclick="setTipo('garantia')">🔧 Garantías</button>
+      <button class="tipo-tab t-canje" id="tab-canje" onclick="setTipo('canje')">🔄 Canjes</button>
+      <button class="tipo-tab t-reclamacion" id="tab-reclamacion" onclick="setTipo('reclamacion')">📋 Reclamaciones</button>
+    </div>
+    <div class="form-card-hdr hdr-garantia" id="formCardHdr">
+      <h2 id="formTitle">➕ Nuevo registro de garantía</h2>
       <button class="btn btn-ghost" style="font-size:.72rem;padding:4px 10px" onclick="toggleForm()">▾ Contraer</button>
     </div>
     <div class="form-body" id="formBody">
@@ -326,6 +358,7 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <span class="ct-lbl">No cargado</span>
           </div>
           <input type="hidden" id="f_cargado" value="0">
+          <input type="hidden" id="f_tipo" value="garantia">
         </div>
         <div class="field">
           <label>🔄 Cambiado en WALLS</label>
@@ -391,6 +424,7 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
           <tr>
             <th style="width:30px" class="sticky-col"></th>
             <th style="width:70px" class="sticky-col2">ACCIONES</th>
+            <th onclick="sortBy('tipo')">TIPO</th>
             <th onclick="sortBy('referencia')">REFERENCIA</th>
             <th onclick="sortBy('denominacion')" style="min-width:160px">DENOMINACIÓN</th>
             <th onclick="sortBy('numPedido')">Nº PEDIDO</th>
@@ -406,7 +440,7 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
           </tr>
         </thead>
         <tbody id="tableBody">
-          <tr><td colspan="14" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
+          <tr><td colspan="15" class="empty-row">Sin registros todavía. Crea el primero con el formulario de arriba.</td></tr>
         </tbody>
       </table>
     </div>
@@ -781,6 +815,7 @@ function guardarRegistro() {
   const recibido = document.getElementById('f_recibido').value === '1';
   const rec = {
     id: uid(), referencias: [...formRefs], referencia: formRefs[0]||'',
+    tipo: document.getElementById('f_tipo').value || 'garantia',
     denominacion, numPedido, fechaPedido,
     numFactura, fechaFactura, numOrden, archivo, fechaCita, centro, cargado, walls, recibido,
     enviado: false, fechaCreacion: new Date().toISOString()
@@ -812,6 +847,8 @@ function sortBy(field) {
 function getFiltered() {
   const q = (document.getElementById('searchInput').value || '').toLowerCase().trim();
   return records.filter(r => {
+    // Filtrar por tipo activo
+    if (tipoActual !== 'all' && (r.tipo || 'garantia') !== tipoActual) return false;
     if (activeFilter === 'pending' && (r.cargado || r.enviado)) return false;
     if (activeFilter === 'loaded'  && (!r.cargado || r.enviado)) return false;
     if (activeFilter === 'sent'     && !r.enviado) return false;
@@ -861,7 +898,7 @@ function renderTabla() {
   const rows  = getFiltered();
   const tbody = document.getElementById('tableBody');
   if (!rows.length) {
-    tbody.innerHTML = '<tr><td colspan="14" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="15" class="empty-row">🔍 Sin registros que coincidan con los filtros.</td></tr>';
     return;
   }
   tbody.innerHTML = rows.map(r => {
@@ -878,6 +915,7 @@ function renderTabla() {
           <button class="act-btn danger" onclick="eliminarRegistro('${r.id}')" title="Eliminar">🗑️</button>
         </div>
       </td>
+      <td>${r.tipo==='canje'?'<span class="badge-canje">🔄 Canje</span>':r.tipo==='reclamacion'?'<span class="badge-reclamacion">📋 Reclamación</span>':'<span class="badge-garantia">🔧 Garantía</span>'}</td>
       <td>${(Array.isArray(r.referencias)?r.referencias:[r.referencia||'']).map(ref=>'<span class="ref-cell" style="display:inline-block;margin:1px 2px">'+esc(ref)+'</span>').join('')}</td>
       <td style="max-width:220px;word-break:break-word">${esc(r.denominacion||'—')}</td>
       <td><span class="mono-cell">${esc(r.numPedido||'—')}</span></td>
@@ -988,6 +1026,7 @@ function guardarEdit() {
     archivo:      document.getElementById('e_archivo').value.trim(),
     fechaCita:    document.getElementById('e_fechaCita').value,
     centro:       document.getElementById('e_centro').value,
+    tipo:         records[records.findIndex(r=>r.id===editingId)].tipo || 'garantia',
     cargado:      document.getElementById('e_cargado').value === '1',
     walls:        document.getElementById('e_walls').value === '1',
     recibido:     document.getElementById('e_recibido').value === '1',
@@ -1058,10 +1097,10 @@ function ejecutarExport() {
   const BOM = '\uFEFF';
   const sep = ';';
   function qv(v) { return '"' + String(v||'').replace(/"/g, '""') + '"'; }
-  const headers = ['Referencias','Denominacion','N Pedido','Fecha Pedido','N Factura','Fecha Factura','N Orden','Archivo','Fecha Cita','Centro','Cargado Orden','WALLS','Recibido','Estado','Fecha Creacion'];
+  const headers = ['Tipo','Referencias','Denominacion','N Pedido','Fecha Pedido','N Factura','Fecha Factura','N Orden','Archivo','Fecha Cita','Centro','Cargado Orden','WALLS','Recibido','Estado','Fecha Creacion'];
   const csvRows = toExport.map(function(r) {
     return [
-      (Array.isArray(r.referencias)?r.referencias.join(' / '):(r.referencia||'')), r.denominacion||'', r.numPedido||'', fmtDate(r.fechaPedido),
+      r.tipo||'garantia', (Array.isArray(r.referencias)?r.referencias.join(' / '):(r.referencia||'')), r.denominacion||'', r.numPedido||'', fmtDate(r.fechaPedido),
       r.numFactura||'', fmtDate(r.fechaFactura), r.numOrden||'', r.archivo||'', fmtDate(r.fechaCita),
       r.centro === 'guadalajara' ? 'Guadalajara' : 'Alcala',
       r.cargado ? 'Si' : 'No',
@@ -1227,6 +1266,47 @@ function actualizarQRBtns() {
 initFirebase();
 renderTabla();
 updateStats();
+
+// ── TIPO SELECTOR ──
+let tipoActual = 'garantia';
+
+const TIPO_CONFIG = {
+  garantia:   { label: '➕ Nuevo registro de garantía',   hdrClass: 'hdr-garantia',   headerClass: 'tipo-garantia',   btnClass: 'btn-primary' },
+  canje:      { label: '➕ Nuevo registro de canje',       hdrClass: 'hdr-canje',       headerClass: 'tipo-canje',       btnClass: 'btn-green'   },
+  reclamacion:{ label: '➕ Nuevo registro de reclamación', hdrClass: 'hdr-reclamacion', headerClass: 'tipo-reclamacion', btnClass: 'btn-red'     }
+};
+
+function setTipo(tipo) {
+  tipoActual = tipo;
+  const cfg = TIPO_CONFIG[tipo];
+
+  // Update tabs
+  ['garantia','canje','reclamacion'].forEach(t => {
+    const tab = document.getElementById('tab-' + t);
+    if (tab) tab.classList.toggle('active', t === tipo);
+  });
+
+  // Update form header
+  const hdr = document.getElementById('formCardHdr');
+  if (hdr) {
+    hdr.className = 'form-card-hdr ' + cfg.hdrClass;
+  }
+  const title = document.getElementById('formTitle');
+  if (title) title.textContent = cfg.label;
+
+  // Update header bar color
+  const header = document.querySelector('.header');
+  if (header) {
+    header.className = 'header ' + cfg.headerClass;
+  }
+
+  // Update tipo hidden field
+  const fTipo = document.getElementById('f_tipo');
+  if (fTipo) fTipo.value = tipo;
+
+  // Filter table to show current tipo (or all if none selected)
+  renderTabla();
+}
 
 // ── DUAL SCROLL SYNC ──
 (function() {
