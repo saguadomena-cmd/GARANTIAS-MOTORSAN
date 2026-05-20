@@ -252,6 +252,24 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 .badge-canje{background:#eaf5ef;color:#1a5e2a;border:1px solid #b2dfc9;display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:.62rem;font-weight:700}
 .badge-reclamacion{background:#fff0f0;color:#7c1a1a;border:1px solid #f0c0c5;display:inline-flex;align-items:center;padding:2px 7px;border-radius:20px;font-size:.62rem;font-weight:700}
 
+/* ── CANJE COUNTDOWN ── */
+.countdown-ok{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;background:#eaf5ef;color:#1a7f4e;border:1px solid #b2dfc9}
+.countdown-warn{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;background:#fff8ec;color:#c47200;border:1px solid #f0c060;animation:pulse-orange 1.5s infinite}
+.countdown-urgent{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;background:#fff0f0;color:#bb0a21;border:1px solid #f0c0c5;animation:pulse-red 1.5s infinite}
+.countdown-vencida{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;background:#bb0a21;color:#fff;border:1px solid #9b0018;animation:pulse-red 1s infinite}
+.countdown-none{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;background:var(--surface2);color:var(--muted2);border:1px solid var(--border)}
+.devuelta-si{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:700;background:#eaf5ef;color:#1a7f4e;border:1px solid #b2dfc9}
+.devuelta-no{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:.65rem;font-weight:700;background:#fff0f0;color:#bb0a21;border:1px solid #f0c0c5}
+
+/* panel canje oculto por defecto */
+.panel-canje{display:none}
+.panel-garantia{display:block}
+.panel-reclamacion{display:none}
+
+/* ── RECLAMACION BADGES ── */
+.badge-abonado{display:inline-flex;align-items:center;gap:3px;padding:2px 9px;border-radius:20px;font-size:.65rem;font-weight:700;background:#eaf5ef;color:#1a7f4e;border:1px solid #b2dfc9}
+.badge-pendiente-abono{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:20px;font-size:.65rem;font-weight:700;background:#fff0f0;color:#bb0a21;border:1px solid #f0c0c5;animation:pulse-red 2s infinite}
+
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .form-grid{grid-template-columns:1fr 1fr}
@@ -274,8 +292,8 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
       </svg>
     </div>
     <div>
-      <div class="header-title">🔧 Garantías · MOTORSAN</div>
-      <div class="header-sub">GESTIÓN DE PIEZAS SUSTITUIDAS EN GARANTÍA <span style="background:rgba(255,255,255,.15);border-radius:3px;padding:0 5px;font-size:.58rem;margin-left:4px">v1.0</span></div>
+      <div class="header-title" id="headerTitle">🔧 Garantías · MOTORSAN</div>
+      <div class="header-sub" id="headerSub">GESTIÓN DE PIEZAS SUSTITUIDAS EN GARANTÍA <span style="background:rgba(255,255,255,.15);border-radius:3px;padding:0 5px;font-size:.58rem;margin-left:4px">v1.0</span></div>
     </div>
   </div>
   <div class="header-stats">
@@ -377,6 +395,147 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
           <input type="hidden" id="f_recibido" value="0">
         </div>
       </div>
+      <!-- ══ PANEL GARANTÍA (por defecto) ══ -->
+      <div id="panelGarantia" class="panel-garantia">
+        <!-- campos garantía ya existentes arriba -->
+      </div>
+
+      <!-- ══ PANEL CANJE ══ -->
+      <div id="panelCanje" class="panel-canje">
+        <div class="form-grid" style="margin-top:0">
+          <div class="field">
+            <label>📦 Referencia pieza</label>
+            <input type="text" id="fc_referencia" class="mono" placeholder="8U0-061-109" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field" style="grid-column:span 2">
+            <label>📝 Denominación</label>
+            <input type="text" id="fc_denominacion" placeholder="Descripción de la pieza" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>🔢 Nº Pedido</label>
+            <input type="text" id="fc_numPedido" class="mono" placeholder="35XXXXXX" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>📅 Fecha Pedido</label>
+            <input type="date" id="fc_fechaPedido">
+          </div>
+          <div class="field">
+            <label>🧾 Nº Factura</label>
+            <input type="text" id="fc_numFactura" class="mono" placeholder="FAC-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field">
+            <label>📅 Fecha Factura</label>
+            <input type="date" id="fc_fechaFactura">
+          </div>
+          <div class="field">
+            <label>📋 Nº Orden</label>
+            <input type="text" id="fc_numOrden" class="mono" placeholder="OT-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field">
+            <label>🗂️ Nº Archivo</label>
+            <input type="text" id="fc_archivo" class="mono" placeholder="#119XXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field">
+            <label>⏳ Fecha límite devolución</label>
+            <input type="date" id="fc_fechaLimite" oninput="previewCountdown()">
+          </div>
+          <div class="field" id="fc_countdownPreview" style="display:none">
+            <label>⏱️ Tiempo restante</label>
+            <div id="fc_countdownVal" style="padding-top:6px"></div>
+          </div>
+          <div class="field">
+            <label>📅 Fecha devolución a fábrica</label>
+            <input type="date" id="fc_fechaDevolucion">
+          </div>
+          <div class="field">
+            <label>💶 Fecha abono casco</label>
+            <input type="date" id="fc_fechaAbono">
+          </div>
+          <div class="field">
+            <label>🏭 Devuelto a fábrica</label>
+            <div class="cargado-toggle" id="fc_devueltoToggle" onclick="toggleDevueltoForm()">
+              <div class="ct-dot"></div>
+              <span class="ct-lbl">No devuelto</span>
+            </div>
+            <input type="hidden" id="fc_devuelto" value="0">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost" onclick="limpiarFormCanje()">Limpiar</button>
+          <button class="btn" style="background:#1a5e2a;color:#fff" onclick="guardarCanje()">💾 Guardar canje</button>
+        </div>
+      </div>
+
+      <!-- ══ PANEL RECLAMACIÓN ══ -->
+      <div id="panelReclamacion" class="panel-reclamacion">
+        <div class="form-grid" style="margin-top:0">
+          <div class="field">
+            <label>📦 Referencia pieza</label>
+            <input type="text" id="fr_referencia" class="mono" placeholder="8U0-061-109" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field" style="grid-column:span 2">
+            <label>📝 Denominación</label>
+            <input type="text" id="fr_denominacion" placeholder="Descripción de la pieza" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>🔢 Nº Pedido</label>
+            <input type="text" id="fr_numPedido" class="mono" placeholder="35XXXXXX" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>📅 Fecha Pedido</label>
+            <input type="date" id="fr_fechaPedido">
+          </div>
+          <div class="field">
+            <label>🧾 Nº Factura</label>
+            <input type="text" id="fr_numFactura" class="mono" placeholder="FAC-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field">
+            <label>📅 Fecha Factura</label>
+            <input type="date" id="fr_fechaFactura">
+          </div>
+          <div class="field">
+            <label>📋 Orden</label>
+            <input type="text" id="fr_numOrden" class="mono" placeholder="OT-2026-XXXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field">
+            <label>🗂️ Archivo</label>
+            <input type="text" id="fr_archivo" class="mono" placeholder="#119XXX" autocomplete="off" oninput="this.value=this.value.toUpperCase()">
+          </div>
+          <div class="field">
+            <label>📅 Fecha Reclamación</label>
+            <input type="date" id="fr_fechaReclamacion">
+          </div>
+          <div class="field" style="grid-column:span 2">
+            <label>📄 Motivo</label>
+            <input type="text" id="fr_motivo" placeholder="Describe el motivo de la reclamación" autocomplete="off">
+          </div>
+          <div class="field">
+            <label>🔙 Devuelto</label>
+            <div class="cargado-toggle" id="fr_devueltoToggle" onclick="toggleDevueltoReclamacion()">
+              <div class="ct-dot"></div>
+              <span class="ct-lbl">No devuelto</span>
+            </div>
+            <input type="hidden" id="fr_devuelto" value="0">
+          </div>
+          <div class="field">
+            <label>📅 Fecha devolución</label>
+            <input type="date" id="fr_fechaDevolucion">
+          </div>
+          <div class="field">
+            <label>💶 Abonado por marca</label>
+            <div class="cargado-toggle" id="fr_abonadoToggle" onclick="toggleAbonadoReclamacion()" style="border-color:#1a5e2a">
+              <div class="ct-dot"></div>
+              <span class="ct-lbl" style="color:#bb0a21">⏳ Pendiente abono marca</span>
+            </div>
+            <input type="hidden" id="fr_abonado" value="0">
+          </div>
+        </div>
+        <div class="form-actions">
+          <button class="btn btn-ghost" onclick="limpiarFormReclamacion()">Limpiar</button>
+          <button class="btn" style="background:#7c1a1a;color:#fff" onclick="guardarReclamacion()">💾 Guardar reclamación</button>
+        </div>
+      </div>
+
       <div class="qr-section">
         <div class="qr-label">⚡ Referencias rápidas — pulsa para rellenar el campo Referencia</div>
         <div class="qr-btns" id="qrBtns">
@@ -432,8 +591,8 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <th onclick="sortBy('numFactura')">Nº FACTURA</th>
             <th onclick="sortBy('numOrden')">Nº ORDEN</th>
             <th onclick="sortBy('archivo')">ARCHIVO</th>
-            <th onclick="sortBy('fechaCita')">CITA</th>
-            <th>CARGADO</th>
+            <th onclick="sortBy('fechaCita')">CITA / LÍMITE</th>
+            <th>CARGADO / DEVUELTO</th>
             <th>WALLS</th>
             <th>RECIBIDO</th>
             <th>ESTADO</th>
@@ -902,11 +1061,22 @@ function renderTabla() {
     return;
   }
   tbody.innerHTML = rows.map(r => {
-    const estadoBadge = r.enviado
-      ? '<span class="badge badge-sent">✈️ Enviado contabilidad</span>'
-      : r.cargado
-        ? '<span class="badge badge-loaded">✓ En orden</span>'
-        : '<span class="badge badge-pending">⏳ Sin cargar</span>';
+    let estadoBadge;
+    if (r.tipo === 'reclamacion') {
+      estadoBadge = r.abonado
+        ? '<span class="badge-abonado">✅ Abonado marca</span>'
+        : '<span class="badge-pendiente-abono">⏳ Pendiente abono marca</span>';
+    } else if (r.tipo === 'canje') {
+      estadoBadge = r.devuelto
+        ? '<span class="badge badge-loaded">🏭 Devuelto fábrica</span>'
+        : '<span class="badge badge-pending">⏳ Pendiente devolución</span>';
+    } else {
+      estadoBadge = r.enviado
+        ? '<span class="badge badge-sent">✈️ Enviado contabilidad</span>'
+        : r.cargado
+          ? '<span class="badge badge-loaded">✓ En orden</span>'
+          : '<span class="badge badge-pending">⏳ Sin cargar</span>';
+    }
     return `<tr class="${r.enviado ? 'exported' : ''}">
       <td class="sticky-col"><div class="cb-wrap"><input type="checkbox" class="row-cb" data-id="${r.id}" onchange="updateExportCount()"></div></td>
       <td class="sticky-col2">
@@ -917,13 +1087,13 @@ function renderTabla() {
       </td>
       <td>${r.tipo==='canje'?'<span class="badge-canje">🔄 Canje</span>':r.tipo==='reclamacion'?'<span class="badge-reclamacion">📋 Reclamación</span>':'<span class="badge-garantia">🔧 Garantía</span>'}</td>
       <td>${(Array.isArray(r.referencias)?r.referencias:[r.referencia||'']).map(ref=>'<span class="ref-cell" style="display:inline-block;margin:1px 2px">'+esc(ref)+'</span>').join('')}</td>
-      <td style="max-width:220px;word-break:break-word">${esc(r.denominacion||'—')}</td>
+      <td style="max-width:220px;word-break:break-word">${esc(r.denominacion||'—')}${r.motivo?'<br><span style="font-size:.65rem;color:var(--muted);font-style:italic">'+esc(r.motivo)+'</span>':''}</td>
       <td><span class="mono-cell">${esc(r.numPedido||'—')}</span></td>
       <td style="font-size:.75rem;white-space:nowrap">${fmtDate(r.fechaPedido)}</td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.numFactura||'—')}</span></td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.numOrden||'—')}</span></td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.archivo||'—')}</span></td>
-      <td>${citaBadge(r.fechaCita, r.cargado)}</td>
+      <td>${r.tipo==='canje' ? countdownBadge(r.fechaLimite, r.devuelto) : citaBadge(r.fechaCita, r.cargado)}</td>
       <td>
         <div class="tog-wrap">
           <button class="tog ${r.cargado?'on':''}" onclick="toggleCargadoReg('${r.id}')"></button>
@@ -949,10 +1119,11 @@ function renderTabla() {
 
 // ── STATS ──
 function updateStats() {
-  document.getElementById('statTotal').textContent    = records.length;
-  document.getElementById('statPendiente').textContent = records.filter(r => !r.cargado && !r.enviado).length;
-  document.getElementById('statCargado').textContent   = records.filter(r => r.cargado && !r.enviado).length;
-  document.getElementById('statEnviado').textContent   = records.filter(r => r.enviado).length;
+  const filtered = records.filter(r => (r.tipo || 'garantia') === tipoActual);
+  document.getElementById('statTotal').textContent     = filtered.length;
+  document.getElementById('statPendiente').textContent = filtered.filter(r => !r.cargado && !r.enviado).length;
+  document.getElementById('statCargado').textContent   = filtered.filter(r => r.cargado && !r.enviado).length;
+  document.getElementById('statEnviado').textContent   = filtered.filter(r => r.enviado).length;
 }
 
 // ── TOGGLE CARGADO EN TABLA ──
@@ -1271,9 +1442,27 @@ updateStats();
 let tipoActual = 'garantia';
 
 const TIPO_CONFIG = {
-  garantia:   { label: '➕ Nuevo registro de garantía',   hdrClass: 'hdr-garantia',   headerClass: 'tipo-garantia',   btnClass: 'btn-primary' },
-  canje:      { label: '➕ Nuevo registro de canje',       hdrClass: 'hdr-canje',       headerClass: 'tipo-canje',       btnClass: 'btn-green'   },
-  reclamacion:{ label: '➕ Nuevo registro de reclamación', hdrClass: 'hdr-reclamacion', headerClass: 'tipo-reclamacion', btnClass: 'btn-red'     }
+  garantia:   {
+    label:       '➕ Nuevo registro de garantía',
+    hdrClass:    'hdr-garantia',
+    headerClass: 'tipo-garantia',
+    title:       '🔧 Garantías · MOTORSAN',
+    sub:         'GESTIÓN DE PIEZAS SUSTITUIDAS EN GARANTÍA'
+  },
+  canje:      {
+    label:       '➕ Nuevo registro de canje',
+    hdrClass:    'hdr-canje',
+    headerClass: 'tipo-canje',
+    title:       '🔄 Canjes · MOTORSAN',
+    sub:         'GESTIÓN DE CANJES DE PIEZAS'
+  },
+  reclamacion:{
+    label:       '➕ Nuevo registro de reclamación',
+    hdrClass:    'hdr-reclamacion',
+    headerClass: 'tipo-reclamacion',
+    title:       '📋 Reclamaciones · MOTORSAN',
+    sub:         'GESTIÓN DE RECLAMACIONES'
+  }
 };
 
 function setTipo(tipo) {
@@ -1294,11 +1483,35 @@ function setTipo(tipo) {
   const title = document.getElementById('formTitle');
   if (title) title.textContent = cfg.label;
 
+  // Update header title and subtitle
+  const headerTitle = document.getElementById('headerTitle');
+  const headerSub   = document.getElementById('headerSub');
+  if (headerTitle) headerTitle.textContent = cfg.title;
+  if (headerSub)   headerSub.innerHTML = cfg.sub + ' <span style="background:rgba(255,255,255,.15);border-radius:3px;padding:0 5px;font-size:.58rem;margin-left:4px">v1.0</span>';
+
   // Update header bar color
   const header = document.querySelector('.header');
   if (header) {
     header.className = 'header ' + cfg.headerClass;
   }
+
+  // Show/hide panels
+  const panelG = document.getElementById('panelGarantia');
+  const panelC = document.getElementById('panelCanje');
+  const panelR = document.getElementById('panelReclamacion');
+  const formDefault = document.getElementById('formBody');
+
+  // Hide/show canje panel and refs section
+  if (panelC) panelC.style.display = tipo === 'canje'       ? 'block' : 'none';
+  if (panelR) panelR.style.display = tipo === 'reclamacion' ? 'block' : 'none';
+
+  // Show/hide main garantia form fields
+  const mainGrid = document.querySelector('#formBody > .form-grid');
+  const qrSection = document.querySelector('.qr-section');
+  const mainActions = document.querySelector('#formBody > .form-actions');
+  if (mainGrid)    mainGrid.style.display    = tipo === 'garantia' ? '' : 'none';
+  if (qrSection)   qrSection.style.display   = tipo === 'garantia' ? '' : 'none';
+  if (mainActions) mainActions.style.display  = tipo === 'garantia' ? '' : 'none';
 
   // Update tipo hidden field
   const fTipo = document.getElementById('f_tipo');
@@ -1306,6 +1519,195 @@ function setTipo(tipo) {
 
   // Filter table to show current tipo (or all if none selected)
   renderTabla();
+  updateStats();
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CANJE FUNCTIONS
+// ══════════════════════════════════════════════════════════════════
+let formDevuelto = false;
+
+function countdownBadge(fechaLimite, devuelto) {
+  if (!fechaLimite) return '<span class="countdown-none">Sin fecha límite</span>';
+  if (devuelto) {
+    const str = new Date(fechaLimite+'T00:00').toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+    return '<span class="countdown-ok">✓ Devuelto · Límite: ' + str + '</span>';
+  }
+  const today = new Date(); today.setHours(0,0,0,0);
+  const lim   = new Date(fechaLimite+'T00:00');
+  const diff  = Math.round((lim - today) / 86400000);
+  const str   = lim.toLocaleDateString('es-ES',{day:'2-digit',month:'2-digit',year:'numeric'});
+  if (diff < 0)   return '<span class="countdown-vencida">🚨 VENCIDA hace ' + Math.abs(diff) + 'd · ' + str + '</span>';
+  if (diff === 0) return '<span class="countdown-urgent">⚠️ VENCE HOY · ' + str + '</span>';
+  if (diff <= 7)  return '<span class="countdown-urgent">⚠️ ' + diff + ' días · ' + str + '</span>';
+  if (diff <= 30) return '<span class="countdown-warn">⏳ ' + diff + ' días · ' + str + '</span>';
+  return '<span class="countdown-ok">✓ ' + diff + ' días · ' + str + '</span>';
+}
+
+function previewCountdown() {
+  const val = document.getElementById('fc_fechaLimite').value;
+  const preview = document.getElementById('fc_countdownPreview');
+  const previewVal = document.getElementById('fc_countdownVal');
+  if (!val) { preview.style.display = 'none'; return; }
+  preview.style.display = 'flex';
+  previewVal.innerHTML = countdownBadge(val, false);
+}
+
+function toggleDevueltoForm() {
+  formDevuelto = !formDevuelto;
+  const tog = document.getElementById('fc_devueltoToggle');
+  tog.classList.toggle('active', formDevuelto);
+  tog.querySelector('.ct-lbl').textContent = formDevuelto ? 'Devuelto a fábrica ✓' : 'No devuelto';
+  document.getElementById('fc_devuelto').value = formDevuelto ? '1' : '0';
+}
+
+function limpiarFormCanje() {
+  ['fc_referencia','fc_denominacion','fc_numPedido','fc_numFactura','fc_numOrden','fc_archivo'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  ['fc_fechaPedido','fc_fechaFactura','fc_fechaLimite','fc_fechaDevolucion','fc_fechaAbono'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  formDevuelto = false;
+  const tog = document.getElementById('fc_devueltoToggle');
+  if (tog) { tog.classList.remove('active'); tog.querySelector('.ct-lbl').textContent = 'No devuelto'; }
+  document.getElementById('fc_devuelto').value = '0';
+  document.getElementById('fc_countdownPreview').style.display = 'none';
+}
+
+function guardarCanje() {
+  const referencia      = document.getElementById('fc_referencia').value.trim();
+  const denominacion    = document.getElementById('fc_denominacion').value.trim();
+  const numPedido       = document.getElementById('fc_numPedido').value.trim();
+  const fechaPedido     = document.getElementById('fc_fechaPedido').value;
+  const numFactura      = document.getElementById('fc_numFactura').value.trim();
+  const fechaFactura    = document.getElementById('fc_fechaFactura').value;
+  const numOrden        = document.getElementById('fc_numOrden').value.trim();
+  const archivo         = document.getElementById('fc_archivo').value.trim();
+  const fechaLimite     = document.getElementById('fc_fechaLimite').value;
+  const fechaDevolucion = document.getElementById('fc_fechaDevolucion').value;
+  const fechaAbono      = document.getElementById('fc_fechaAbono').value;
+  const devuelto        = document.getElementById('fc_devuelto').value === '1';
+
+  if (!referencia)   { toast('Introduce la referencia de la pieza', 'error'); return; }
+  if (!denominacion) { toast('Introduce la denominación', 'error'); return; }
+  if (!numPedido)    { toast('Introduce el número de pedido', 'error'); return; }
+
+  const rec = {
+    id: uid(), tipo: 'canje',
+    referencias: [referencia], referencia,
+    denominacion, numPedido, fechaPedido,
+    numFactura, fechaFactura, numOrden, archivo,
+    fechaLimite, fechaDevolucion, fechaAbono, devuelto,
+    cargado: devuelto, walls: false, recibido: false,
+    enviado: false, fechaCreacion: new Date().toISOString()
+  };
+
+  saveRecord(rec);
+  toast('✅ Canje guardado ✓', 'success');
+  limpiarFormCanje();
+}
+
+// Toggle devuelto en tabla
+function toggleDevueltoReg(id) {
+  const idx = records.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  records[idx].devuelto = !records[idx].devuelto;
+  records[idx].cargado  = records[idx].devuelto; // sync
+  updateField(id, 'devuelto', records[idx].devuelto);
+  updateField(id, 'cargado',  records[idx].cargado);
+  renderTabla(); updateStats();
+  toast(records[idx].devuelto ? '🏭 Marcado como devuelto a fábrica' : 'Desmarcado de devuelto', 'info');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// RECLAMACION FUNCTIONS
+// ══════════════════════════════════════════════════════════════════
+let formDevueltoRec = false;
+let formAbonadoRec  = false;
+
+function toggleDevueltoReclamacion() {
+  formDevueltoRec = !formDevueltoRec;
+  const tog = document.getElementById('fr_devueltoToggle');
+  tog.classList.toggle('active', formDevueltoRec);
+  tog.querySelector('.ct-lbl').textContent = formDevueltoRec ? 'Devuelto ✓' : 'No devuelto';
+  document.getElementById('fr_devuelto').value = formDevueltoRec ? '1' : '0';
+}
+
+function toggleAbonadoReclamacion() {
+  formAbonadoRec = !formAbonadoRec;
+  const tog = document.getElementById('fr_abonadoToggle');
+  tog.classList.toggle('active', formAbonadoRec);
+  const lbl = tog.querySelector('.ct-lbl');
+  lbl.textContent = formAbonadoRec ? '✓ Abonado por marca' : '⏳ Pendiente abono marca';
+  lbl.style.color = formAbonadoRec ? '' : '#bb0a21';
+  document.getElementById('fr_abonado').value = formAbonadoRec ? '1' : '0';
+}
+
+function limpiarFormReclamacion() {
+  ['fr_referencia','fr_denominacion','fr_numPedido','fr_numFactura','fr_numOrden','fr_archivo','fr_motivo'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  ['fr_fechaPedido','fr_fechaFactura','fr_fechaReclamacion','fr_fechaDevolucion'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
+  });
+  formDevueltoRec = false;
+  formAbonadoRec  = false;
+  const togD = document.getElementById('fr_devueltoToggle');
+  if (togD) { togD.classList.remove('active'); togD.querySelector('.ct-lbl').textContent = 'No devuelto'; }
+  document.getElementById('fr_devuelto').value = '0';
+  const togA = document.getElementById('fr_abonadoToggle');
+  if (togA) {
+    togA.classList.remove('active');
+    const lbl = togA.querySelector('.ct-lbl');
+    lbl.textContent = '⏳ Pendiente abono marca';
+    lbl.style.color = '#bb0a21';
+  }
+  document.getElementById('fr_abonado').value = '0';
+}
+
+function guardarReclamacion() {
+  const referencia       = document.getElementById('fr_referencia').value.trim();
+  const denominacion     = document.getElementById('fr_denominacion').value.trim();
+  const numPedido        = document.getElementById('fr_numPedido').value.trim();
+  const fechaPedido      = document.getElementById('fr_fechaPedido').value;
+  const numFactura       = document.getElementById('fr_numFactura').value.trim();
+  const fechaFactura     = document.getElementById('fr_fechaFactura').value;
+  const numOrden         = document.getElementById('fr_numOrden').value.trim();
+  const archivo          = document.getElementById('fr_archivo').value.trim();
+  const fechaReclamacion = document.getElementById('fr_fechaReclamacion').value;
+  const motivo           = document.getElementById('fr_motivo').value.trim();
+  const devuelto         = document.getElementById('fr_devuelto').value === '1';
+  const fechaDevolucion  = document.getElementById('fr_fechaDevolucion').value;
+  const abonado          = document.getElementById('fr_abonado').value === '1';
+
+  if (!referencia)   { toast('Introduce la referencia de la pieza', 'error'); return; }
+  if (!denominacion) { toast('Introduce la denominación', 'error'); return; }
+  if (!numPedido)    { toast('Introduce el número de pedido', 'error'); return; }
+
+  const rec = {
+    id: uid(), tipo: 'reclamacion',
+    referencias: [referencia], referencia,
+    denominacion, numPedido, fechaPedido,
+    numFactura, fechaFactura, numOrden, archivo,
+    fechaReclamacion, motivo, devuelto, fechaDevolucion, abonado,
+    cargado: devuelto, walls: false, recibido: false,
+    enviado: false, fechaCreacion: new Date().toISOString()
+  };
+
+  saveRecord(rec);
+  toast('✅ Reclamación guardada ✓', 'success');
+  limpiarFormReclamacion();
+}
+
+// Toggle abonado en tabla
+function toggleAbonadoReg(id) {
+  const idx = records.findIndex(r => r.id === id);
+  if (idx === -1) return;
+  records[idx].abonado = !records[idx].abonado;
+  updateField(id, 'abonado', records[idx].abonado);
+  renderTabla(); updateStats();
+  toast(records[idx].abonado ? '💶 Marcado como abonado por marca' : '⏳ Marcado como pendiente de abono', 'info');
 }
 
 // ── DUAL SCROLL SYNC ──
