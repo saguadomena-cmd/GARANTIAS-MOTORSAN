@@ -592,9 +592,9 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <th onclick="sortBy('numOrden')">Nº ORDEN</th>
             <th onclick="sortBy('archivo')">ARCHIVO</th>
             <th onclick="sortBy('fechaCita')">CITA / LÍMITE</th>
-            <th>CARGADO / DEVUELTO</th>
-            <th>WALLS</th>
-            <th>RECIBIDO</th>
+            <th>CARGADO</th>
+            <th>DEVUELTO</th>
+            <th>ABONADO / RECIBIDO</th>
             <th>ESTADO</th>
           </tr>
         </thead>
@@ -662,21 +662,29 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         </div>
         <input type="hidden" id="e_cargado" value="0">
       </div>
-      <div class="field">
-        <label>🔄 Cambiado en WALLS</label>
-        <div class="cargado-toggle" id="e_wallsToggle" onclick="toggleWallsEdit()" style="border-color:#7c3aed">
-          <div class="ct-dot"></div>
-          <span class="ct-lbl">No cambiado</span>
-        </div>
-        <input type="hidden" id="e_walls" value="0">
-      </div>
-      <div class="field">
+      <div class="field" id="e_recibidoField">
         <label>📬 Recibido</label>
         <div class="cargado-toggle" id="e_recibidoToggle" onclick="toggleRecibidoEdit()" style="border-color:#7c3aed">
           <div class="ct-dot"></div>
           <span class="ct-lbl">No recibido</span>
         </div>
         <input type="hidden" id="e_recibido" value="0">
+      </div>
+      <div class="field" id="e_devueltoField" style="display:none">
+        <label>🔙 Devuelto</label>
+        <div class="cargado-toggle" id="e_devueltoToggle" onclick="toggleDevueltoEdit()">
+          <div class="ct-dot"></div>
+          <span class="ct-lbl">No devuelto</span>
+        </div>
+        <input type="hidden" id="e_devuelto" value="0">
+      </div>
+      <div class="field" id="e_abonadoField" style="display:none">
+        <label>💶 Abonado por marca</label>
+        <div class="cargado-toggle" id="e_abonadoToggle" onclick="toggleAbonadoEdit()" style="border-color:#1a5e2a">
+          <div class="ct-dot"></div>
+          <span class="ct-lbl" style="color:#bb0a21">⏳ Pendiente abono</span>
+        </div>
+        <input type="hidden" id="e_abonado" value="0">
       </div>
     </div>
     <div class="modal-actions">
@@ -888,20 +896,41 @@ function toggleWallsForm() {
   document.getElementById('f_walls').value = formWalls ? '1' : '0';
 }
 
-let editWalls = false;
-function toggleWallsEdit() {
-  editWalls = !editWalls;
-  const tog = document.getElementById('e_wallsToggle');
-  tog.classList.toggle('active-walls', editWalls);
-  tog.querySelector('.ct-lbl').textContent = editWalls ? 'Cambiado en WALLS ✓' : 'No cambiado';
-  document.getElementById('e_walls').value = editWalls ? '1' : '0';
+let editDevuelto = false;
+function toggleDevueltoEdit() {
+  editDevuelto = !editDevuelto;
+  const tog = document.getElementById('e_devueltoToggle');
+  tog.classList.toggle('active', editDevuelto);
+  tog.querySelector('.ct-lbl').textContent = editDevuelto ? 'Devuelto ✓' : 'No devuelto';
+  document.getElementById('e_devuelto').value = editDevuelto ? '1' : '0';
 }
-function setWallsEdit(val) {
-  editWalls = !!val;
-  const tog = document.getElementById('e_wallsToggle');
-  tog.classList.toggle('active-walls', editWalls);
-  tog.querySelector('.ct-lbl').textContent = editWalls ? 'Cambiado en WALLS ✓' : 'No cambiado';
-  document.getElementById('e_walls').value = editWalls ? '1' : '0';
+function setDevueltoEdit(val) {
+  editDevuelto = !!val;
+  const tog = document.getElementById('e_devueltoToggle');
+  if (!tog) return;
+  tog.classList.toggle('active', editDevuelto);
+  tog.querySelector('.ct-lbl').textContent = editDevuelto ? 'Devuelto ✓' : 'No devuelto';
+  document.getElementById('e_devuelto').value = editDevuelto ? '1' : '0';
+}
+let editAbonado = false;
+function toggleAbonadoEdit() {
+  editAbonado = !editAbonado;
+  const tog = document.getElementById('e_abonadoToggle');
+  tog.classList.toggle('active', editAbonado);
+  const lbl = tog.querySelector('.ct-lbl');
+  lbl.textContent = editAbonado ? '✓ Abonado por marca' : '⏳ Pendiente abono';
+  lbl.style.color = editAbonado ? '' : '#bb0a21';
+  document.getElementById('e_abonado').value = editAbonado ? '1' : '0';
+}
+function setAbonadoEdit(val) {
+  editAbonado = !!val;
+  const tog = document.getElementById('e_abonadoToggle');
+  if (!tog) return;
+  tog.classList.toggle('active', editAbonado);
+  const lbl = tog.querySelector('.ct-lbl');
+  lbl.textContent = editAbonado ? '✓ Abonado por marca' : '⏳ Pendiente abono';
+  lbl.style.color = editAbonado ? '' : '#bb0a21';
+  document.getElementById('e_abonado').value = editAbonado ? '1' : '0';
 }
 
 function toggleCargadoEdit() {
@@ -921,8 +950,8 @@ function setCargadoEdit(val) {
 }
 
 function limpiarForm() {
-  ['f_referencia','f_denominacion','f_numPedido','f_fechaPedido','f_numFactura','f_fechaFactura','f_numOrden','f_archivo'].forEach(id => {
-    document.getElementById(id).value = '';
+  ['f_denominacion','f_numPedido','f_fechaPedido','f_numFactura','f_fechaFactura','f_numOrden','f_archivo','f_fechaCita'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value = '';
   });
   document.getElementById('f_centro').value = 'alcala';
   formCargado = false;
@@ -933,7 +962,7 @@ function limpiarForm() {
   formRefs = [];
   renderRefTags();
   actualizarQRBtns();
-  const fc = document.getElementById('f_fechaCita'); if(fc) fc.value = '';
+  const refInp = document.getElementById('f_refInput'); if(refInp) refInp.value = '';
   formWalls = false;
   const wt = document.getElementById('f_wallsToggle');
   if (wt) { wt.classList.remove('active-walls'); wt.querySelector('.ct-lbl').textContent = 'No cambiado'; }
@@ -1094,23 +1123,15 @@ function renderTabla() {
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.numOrden||'—')}</span></td>
       <td><span class="mono-cell" style="font-size:.73rem">${esc(r.archivo||'—')}</span></td>
       <td>${r.tipo==='canje' ? countdownBadge(r.fechaLimite, r.devuelto) : citaBadge(r.fechaCita, r.cargado)}</td>
+
       <td>
-        <div class="tog-wrap">
-          <button class="tog ${r.cargado?'on':''}" onclick="toggleCargadoReg('${r.id}')"></button>
-          <span class="tog-lbl">${r.cargado?'Sí':'No'}</span>
-        </div>
+        ${r.tipo==='canje'||r.tipo==='reclamacion' ? '<span style="color:var(--muted2);font-size:.72rem">—</span>' : '<div class="tog-wrap"><button class="tog '+( r.cargado?'on':'')+'" onclick="toggleCargadoReg(''+r.id+'')"></button><span class="tog-lbl">'+(r.cargado?'Sí':'No')+'</span></div>'}
       </td>
       <td>
-        <div class="tog-wrap">
-          <button class="tog ${r.walls?'on':''}" style="${r.walls?'background:var(--sent)':''}" onclick="toggleWallsReg('${r.id}')"></button>
-          <span class="tog-lbl" style="${r.walls?'color:var(--sent)':''}">${r.walls?'Sí':'No'}</span>
-        </div>
+        ${r.tipo==='canje' ? '<div class="tog-wrap"><button class="tog '+(r.devuelto?'on':'')+'" style="'+(r.devuelto?'background:#1a5e2a':'')+'" onclick="toggleDevueltoReg(''+r.id+'')"></button><span class="tog-lbl" style="'+(r.devuelto?'color:#1a5e2a':'')+'"> '+(r.devuelto?'Sí':'No')+'</span></div>' : r.tipo==='reclamacion' ? '<div class="tog-wrap"><button class="tog '+(r.devuelto?'on':'')+'" style="'+(r.devuelto?'background:#7c1a1a':'')+'" onclick="toggleDevueltoReg(''+r.id+'')"></button><span class="tog-lbl" style="'+(r.devuelto?'color:#7c1a1a':'')+'"> '+(r.devuelto?'Sí':'No')+'</span></div>' : '<span style="color:var(--muted2);font-size:.72rem">—</span>'}
       </td>
       <td>
-        <div class="tog-wrap">
-          <button class="tog ${r.recibido?'on':''}" style="${r.recibido?'background:#7c3aed':''}" onclick="toggleRecibidoReg('${r.id}')"></button>
-          <span class="tog-lbl" style="${r.recibido?'color:#7c3aed':''}">${r.recibido?'Sí':'No'}</span>
-        </div>
+        ${r.tipo==='reclamacion' ? '<div class="tog-wrap"><button class="tog '+(r.abonado?'on':'')+'" style="'+(r.abonado?'background:#1a5e2a':'')+'" onclick="toggleAbonadoReg(''+r.id+'')"></button><span class="tog-lbl" style="'+(r.abonado?'color:#1a5e2a':'color:#bb0a21')+'"> '+(r.abonado?'Abonado':'Pendiente')+'</span></div>' : '<div class="tog-wrap"><button class="tog '+(r.recibido?'on':'')+'" style="'+(r.recibido?'background:#7c3aed':'')+'" onclick="toggleRecibidoReg(''+r.id+'')"></button><span class="tog-lbl" style="'+(r.recibido?'color:#7c3aed':'')+'"> '+(r.recibido?'Sí':'No')+'</span></div>'}
       </td>
       <td>${estadoBadge}</td>
     </tr>`;
@@ -1171,8 +1192,21 @@ function abrirEdit(id) {
   document.getElementById('e_fechaCita').value  = r.fechaCita    || '';
   document.getElementById('e_centro').value       = r.centro       || 'alcala';
   setCargadoEdit(r.cargado);
-  setWallsEdit(r.walls);
   setRecibidoEdit(r.recibido);
+
+  // Show/hide fields based on tipo
+  const isCanje = r.tipo === 'canje';
+  const isRec   = r.tipo === 'reclamacion';
+  const devField = document.getElementById('e_devueltoField');
+  const aboField = document.getElementById('e_abonadoField');
+  const recField = document.getElementById('e_recibidoField');
+  if (devField) devField.style.display = (isCanje||isRec) ? '' : 'none';
+  if (aboField) aboField.style.display = isRec ? '' : 'none';
+  if (recField) recField.style.display = (!isCanje&&!isRec) ? '' : 'none';
+
+  setDevueltoEdit(r.devuelto);
+  setAbonadoEdit(r.abonado);
+
   document.getElementById('editModal').classList.add('open');
 }
 
@@ -1199,8 +1233,9 @@ function guardarEdit() {
     centro:       document.getElementById('e_centro').value,
     tipo:         records[records.findIndex(r=>r.id===editingId)].tipo || 'garantia',
     cargado:      document.getElementById('e_cargado').value === '1',
-    walls:        document.getElementById('e_walls').value === '1',
     recibido:     document.getElementById('e_recibido').value === '1',
+    devuelto:     document.getElementById('e_devuelto').value === '1',
+    abonado:      document.getElementById('e_abonado').value === '1',
   };
   if (!updated.referencia)   { toast('La referencia es obligatoria', 'error'); return; }
   if (!updated.denominacion) { toast('La denominación es obligatoria', 'error'); return; }
@@ -1415,11 +1450,18 @@ function toggleRecibidoReg(id) {
 // ══════════════════════════════════════════════════════════════════
 // REFS RÁPIDAS
 // ══════════════════════════════════════════════════════════════════
+const AIRBAG_REFS = ['8P0898201A', '8R0898201C', '6V0898201', '6V0898201A', '6V0898201B', '4F0880204J', '8E1880204G'];
+
 function usarRefRapida(ref) {
   if (!formRefs.includes(ref)) {
     formRefs.push(ref);
     renderRefTags();
     toast(ref + ' añadida ✓', 'info', 1500);
+  }
+  // Auto-fill denominacion if airbag ref
+  if (AIRBAG_REFS.includes(ref)) {
+    const den = document.getElementById('f_denominacion') || document.getElementById('fc_denominacion');
+    if (den && !den.value.trim()) den.value = 'AIRBAG';
   }
   actualizarQRBtns();
 }
@@ -1562,7 +1604,7 @@ function toggleDevueltoForm() {
 }
 
 function limpiarFormCanje() {
-  ['fc_referencia','fc_denominacion','fc_numPedido','fc_numFactura','fc_numOrden','fc_archivo'].forEach(id => {
+  ['fc_referencia','fc_denominacion','fc_numPedido','fc_numFactura','fc_numOrden','fc_archivo','fc_motivo'].forEach(id => {
     const el = document.getElementById(id); if(el) el.value = '';
   });
   ['fc_fechaPedido','fc_fechaFactura','fc_fechaLimite','fc_fechaDevolucion','fc_fechaAbono'].forEach(id => {
