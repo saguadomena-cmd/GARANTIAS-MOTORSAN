@@ -676,6 +676,14 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         </div>
         <input type="hidden" id="e_recibido" value="0">
       </div>
+      <div class="field" id="e_wallsField">
+        <label>🔄 Cambiado en WALLS</label>
+        <div class="cargado-toggle" id="e_wallsToggle" onclick="toggleWallsEdit()" style="border-color:#7c3aed">
+          <div class="ct-dot"></div>
+          <span class="ct-lbl">No cambiado</span>
+        </div>
+        <input type="hidden" id="e_walls" value="0">
+      </div>
       <div class="field" id="e_devueltoField" style="display:none">
         <label>🔙 Devuelto</label>
         <div class="cargado-toggle" id="e_devueltoToggle" onclick="toggleDevueltoEdit()">
@@ -903,6 +911,21 @@ function toggleWallsForm() {
 }
 
 let editDevuelto = false;
+function toggleWallsEdit() {
+  const tog = document.getElementById('e_wallsToggle');
+  const cur = document.getElementById('e_walls').value === '1';
+  const newVal = !cur;
+  tog.classList.toggle('active-walls', newVal);
+  tog.querySelector('.ct-lbl').textContent = newVal ? 'Cambiado en WALLS ✓' : 'No cambiado';
+  document.getElementById('e_walls').value = newVal ? '1' : '0';
+}
+function setWallsEdit(val) {
+  const tog = document.getElementById('e_wallsToggle');
+  if (!tog) return;
+  tog.classList.toggle('active-walls', !!val);
+  tog.querySelector('.ct-lbl').textContent = val ? 'Cambiado en WALLS ✓' : 'No cambiado';
+  document.getElementById('e_walls').value = val ? '1' : '0';
+}
 function toggleDevueltoEdit() {
   editDevuelto = !editDevuelto;
   const tog = document.getElementById('e_devueltoToggle');
@@ -1206,10 +1229,13 @@ function abrirEdit(id) {
   const devField = document.getElementById('e_devueltoField');
   const aboField = document.getElementById('e_abonadoField');
   const recField = document.getElementById('e_recibidoField');
+  const wallsField = document.getElementById('e_wallsField');
+  if (wallsField) wallsField.style.display = (!isCanje && !isRec) ? '' : 'none';
   if (devField) devField.style.display = (isCanje||isRec) ? '' : 'none';
   if (aboField) aboField.style.display = isRec ? '' : 'none';
   if (recField) recField.style.display = (!isCanje&&!isRec) ? '' : 'none';
 
+  setWallsEdit(r.walls);
   setDevueltoEdit(r.devuelto);
   setAbonadoEdit(r.abonado);
 
@@ -1240,6 +1266,7 @@ function guardarEdit() {
     tipo:         records[records.findIndex(r=>r.id===editingId)].tipo || 'garantia',
     cargado:      document.getElementById('e_cargado').value === '1',
     recibido:     document.getElementById('e_recibido').value === '1',
+    walls:        document.getElementById('e_walls').value === '1',
     devuelto:     document.getElementById('e_devuelto').value === '1',
     abonado:      document.getElementById('e_abonado').value === '1',
   };
