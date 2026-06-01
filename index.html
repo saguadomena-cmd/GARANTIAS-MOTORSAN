@@ -276,6 +276,46 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 .footer-legal .footer-copy{font-size:.8rem;font-weight:600;color:#fff;margin-bottom:4px;letter-spacing:.04em}
 .footer-legal .footer-warn{color:#fbbf24;font-size:.68rem;margin-top:4px;letter-spacing:.03em}
 
+/* ── CHATARREO ── */
+.tipo-tab.t-chatarreo{background:linear-gradient(135deg,#5c3a00,#a06000);color:#fff}
+.tipo-tab.t-chatarreo:not(.active){background:#a06000;opacity:.5}
+.form-card-hdr.hdr-chatarreo{background:linear-gradient(135deg,#5c3a00,#a06000)}
+.header.tipo-chatarreo{background:linear-gradient(135deg,#5c3a00 0%,#a06000 100%)}
+
+.drop-zone{border:3px dashed #a06000;border-radius:var(--r);background:#fff8ec;padding:40px 20px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:18px}
+.drop-zone:hover,.drop-zone.dragover{background:#f0d9b5;border-color:#5c3a00}
+.drop-zone-icon{font-size:3rem;margin-bottom:10px}
+.drop-zone-text{font-size:.9rem;font-weight:600;color:#5c3a00;margin-bottom:6px}
+.drop-zone-sub{font-size:.75rem;color:#a06000}
+.drop-zone input[type=file]{display:none}
+
+.chat-stats{display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+.chat-stat{background:#fff8ec;border:1px solid #f0c060;border-radius:var(--rs);padding:10px 18px;text-align:center}
+.chat-stat-val{font-size:1.4rem;font-weight:700;color:#5c3a00;line-height:1}
+.chat-stat-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.08em;color:#a06000;margin-top:3px}
+
+.chat-file-info{background:#fff8ec;border:1px solid #f0c060;border-radius:var(--rs);padding:10px 16px;margin-bottom:14px;font-size:.78rem;color:#5c3a00;display:flex;align-items:center;gap:10px}
+.chat-file-info .cfi-icon{font-size:1.4rem}
+
+.chat-table-wrap{overflow-x:auto}
+.chat-table{width:100%;border-collapse:collapse;font-size:.76rem}
+.chat-table th{padding:8px 10px;text-align:left;font-size:.6rem;text-transform:uppercase;letter-spacing:.07em;color:#fff;font-weight:600;background:linear-gradient(135deg,#5c3a00,#a06000);white-space:nowrap;border-right:1px solid rgba(255,255,255,.1)}
+.chat-table td{padding:7px 10px;border-bottom:1px solid #f0e0c0;vertical-align:middle;color:var(--text2)}
+.chat-table tr:hover td{background:#fff8ec}
+.chat-table tr:nth-child(even) td{background:#fffdf5}
+.chat-table tr:nth-child(even):hover td{background:#fff8ec}
+.chat-btn-clear{background:#5c3a00;color:#fff;border:none;border-radius:var(--rs);padding:7px 16px;font-family:var(--font);font-size:.78rem;font-weight:600;cursor:pointer;transition:background .15s}
+.chat-btn-clear:hover{background:#3d2600}
+.chat-btn-export{background:#1d6f42;color:#fff;border:none;border-radius:var(--rs);padding:7px 16px;font-family:var(--font);font-size:.78rem;font-weight:600;cursor:pointer;transition:background .15s;display:inline-flex;align-items:center;gap:6px}
+.chat-btn-export:hover{background:#155232}
+.chat-num{font-family:var(--mono);font-size:.74rem;color:#5c3a00;font-weight:700}
+.chat-ref{font-family:var(--mono);font-size:.73rem;background:#fff8ec;border:1px solid #f0c060;border-radius:4px;padding:2px 7px;display:inline-block;color:#5c3a00;font-weight:700}
+.chat-empty{text-align:center;padding:50px;color:#a06000;font-size:.85rem}
+.chat-empty-icon{font-size:3rem;margin-bottom:10px;opacity:.4}
+
+/* panel chatarreo */
+.panel-chatarreo{display:none}
+
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .form-grid{grid-template-columns:1fr 1fr}
@@ -318,6 +358,7 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
       <button class="tipo-tab t-garantia active" id="tab-garantia" onclick="setTipo('garantia')">🔧 Garantías</button>
       <button class="tipo-tab t-canje" id="tab-canje" onclick="setTipo('canje')">🔄 Canjes</button>
       <button class="tipo-tab t-reclamacion" id="tab-reclamacion" onclick="setTipo('reclamacion')">📋 Reclamaciones</button>
+      <button class="tipo-tab t-chatarreo" id="tab-chatarreo" onclick="setTipo('chatarreo')">♻️ Chatarreo Garantías</button>
     </div>
     <div class="form-card-hdr hdr-garantia" id="formCardHdr">
       <h2 id="formTitle">➕ Nuevo registro de garantía</h2>
@@ -559,6 +600,65 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         <button class="btn btn-ghost" onclick="limpiarForm()">Limpiar</button>
         <button class="btn btn-primary" onclick="guardarRegistro()">💾 Guardar registro</button>
       </div>
+      <!-- ══ PANEL CHATARREO ══ -->
+      <div id="panelChatarreo" class="panel-chatarreo">
+        <!-- Drop zone -->
+        <div class="drop-zone" id="chatDropZone"
+          onclick="document.getElementById('chatFileInput').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="handleChatDrop(event)">
+          <input type="file" id="chatFileInput" accept=".xlsx,.xls,.csv" onchange="handleChatFile(this.files[0])">
+          <div class="drop-zone-icon">📂</div>
+          <div class="drop-zone-text">Arrastra aquí el fichero Excel o haz clic para seleccionar</div>
+          <div class="drop-zone-sub">Formatos aceptados: .xlsx · .xls · .csv</div>
+        </div>
+
+        <!-- Info del fichero cargado -->
+        <div class="chat-file-info" id="chatFileInfo" style="display:none">
+          <span class="cfi-icon">📄</span>
+          <div>
+            <strong id="chatFileName">—</strong>
+            <div id="chatFileDate" style="font-size:.68rem;color:#a06000;margin-top:2px">—</div>
+          </div>
+          <div style="margin-left:auto;display:flex;gap:8px">
+            <button class="chat-btn-export" onclick="exportarChatarreo()">📊 Exportar Excel</button>
+            <button class="chat-btn-clear" onclick="limpiarChatarreo()">🗑️ Limpiar</button>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="chat-stats" id="chatStats" style="display:none">
+          <div class="chat-stat"><div class="chat-stat-val" id="chatTotal">0</div><div class="chat-stat-lbl">Total piezas</div></div>
+          <div class="chat-stat"><div class="chat-stat-val" id="chatRefs">0</div><div class="chat-stat-lbl">Referencias distintas</div></div>
+          <div class="chat-stat"><div class="chat-stat-val" id="chatArchivos">0</div><div class="chat-stat-lbl">Archivos</div></div>
+        </div>
+
+        <!-- Tabla -->
+        <div class="chat-table-wrap">
+          <table class="chat-table" id="chatTable">
+            <thead>
+              <tr>
+                <th style="width:40px">Nº</th>
+                <th>TIPO</th>
+                <th>ARCHIVO</th>
+                <th>Nº PEDIDO</th>
+                <th>REFERENCIA</th>
+                <th>DENOMINACIÓN</th>
+                <th>CANTIDAD</th>
+                <th>FECHA</th>
+                <th>Nº FACTURA</th>
+                <th>VIN / BASTIDOR</th>
+                <th>CÓDIGO</th>
+              </tr>
+            </thead>
+            <tbody id="chatTableBody">
+              <tr><td colspan="11" class="chat-empty"><div class="chat-empty-icon">♻️</div>Arrastra un fichero Excel para cargar la relación de piezas a chatarrear</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1531,6 +1631,13 @@ const TIPO_CONFIG = {
     title:       '🔄 Canjes · MOTORSAN',
     sub:         'GESTIÓN DE CANJES DE PIEZAS'
   },
+  chatarreo:  {
+    label:       '♻️ Chatarreo de Garantías',
+    hdrClass:    'hdr-chatarreo',
+    headerClass: 'tipo-chatarreo',
+    title:       '♻️ Chatarreo · MOTORSAN',
+    sub:         'RELACIÓN DE PIEZAS EN GARANTÍA PARA CHATARREAR'
+  },
   reclamacion:{
     label:       '➕ Nuevo registro de reclamación',
     hdrClass:    'hdr-reclamacion',
@@ -1545,7 +1652,7 @@ function setTipo(tipo) {
   const cfg = TIPO_CONFIG[tipo];
 
   // Update tabs
-  ['garantia','canje','reclamacion'].forEach(t => {
+  ['garantia','canje','reclamacion','chatarreo'].forEach(t => {
     const tab = document.getElementById('tab-' + t);
     if (tab) tab.classList.toggle('active', t === tipo);
   });
@@ -1579,14 +1686,21 @@ function setTipo(tipo) {
   // Hide/show canje panel and refs section
   if (panelC) panelC.style.display = tipo === 'canje'       ? 'block' : 'none';
   if (panelR) panelR.style.display = tipo === 'reclamacion' ? 'block' : 'none';
+  const panelCH = document.getElementById('panelChatarreo');
+  if (panelCH) panelCH.style.display = tipo === 'chatarreo' ? 'block' : 'none';
 
   // Show/hide main garantia form fields
   const mainGrid = document.querySelector('#formBody > .form-grid');
   const qrSection = document.querySelector('.qr-section');
   const mainActions = document.querySelector('#formBody > .form-actions');
-  if (mainGrid)    mainGrid.style.display    = tipo === 'garantia' ? '' : 'none';
-  if (qrSection)   qrSection.style.display   = tipo === 'garantia' ? '' : 'none';
-  if (mainActions) mainActions.style.display  = tipo === 'garantia' ? '' : 'none';
+  const showGarantia = tipo === 'garantia';
+  const showChat     = tipo === 'chatarreo';
+  if (mainGrid)    mainGrid.style.display    = showGarantia ? '' : 'none';
+  if (qrSection)   qrSection.style.display   = showGarantia ? '' : 'none';
+  if (mainActions) mainActions.style.display  = showGarantia ? '' : 'none';
+  // For chatarreo hide the form header title
+  const formHdr = document.getElementById('formCardHdr');
+  if (formHdr) formHdr.style.display = showChat ? 'none' : '';
 
   // Update tipo hidden field
   const fTipo = document.getElementById('f_tipo');
@@ -1783,6 +1897,165 @@ function toggleAbonadoReg(id) {
   updateField(id, 'abonado', records[idx].abonado);
   renderTabla(); updateStats();
   toast(records[idx].abonado ? '💶 Marcado como abonado por marca' : '⏳ Marcado como pendiente de abono', 'info');
+}
+
+// ══════════════════════════════════════════════════════════════════
+// CHATARREO GARANTÍAS
+// ══════════════════════════════════════════════════════════════════
+let chatData = [];
+
+function handleChatDrop(e) {
+  e.preventDefault();
+  document.getElementById('chatDropZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file) handleChatFile(file);
+}
+
+function handleChatFile(file) {
+  if (!file) return;
+  const ext = file.name.split('.').pop().toLowerCase();
+
+  document.getElementById('chatFileName').textContent = file.name;
+  document.getElementById('chatFileDate').textContent = 'Cargado: ' + new Date().toLocaleString('es-ES');
+  document.getElementById('chatFileInfo').style.display = 'flex';
+
+  if (ext === 'csv') {
+    const reader = new FileReader();
+    reader.onload = e => parseChatCSV(e.target.result, file.name);
+    reader.readAsText(file, 'utf-8');
+  } else {
+    // Excel: need SheetJS
+    loadSheetJS(() => {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const wb = XLSX.read(e.target.result, { type: 'binary', cellDates: true });
+        const ws = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+        parseChatRows(rows, file.name);
+      };
+      reader.readAsBinaryString(file);
+    });
+  }
+}
+
+function loadSheetJS(cb) {
+  if (window.XLSX) { cb(); return; }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  s.onload = cb;
+  document.head.appendChild(s);
+}
+
+function parseChatCSV(text, filename) {
+  const lines = text.split('\n').filter(l => l.trim());
+  const rows  = lines.map(l => l.split(/[;\t,]/).map(c => c.trim().replace(/^"|"$/g,'')));
+  parseChatRows(rows, filename);
+}
+
+function parseChatRows(rows, filename) {
+  if (!rows.length) { toast('El fichero está vacío', 'error'); return; }
+
+  // Detect header row
+  let dataStart = 0;
+  const firstRow = rows[0].join(' ').toLowerCase();
+  if (firstRow.includes('pedido') || firstRow.includes('referencia') ||
+      firstRow.includes('tipo') || firstRow.includes('archivo')) {
+    dataStart = 1;
+  }
+
+  chatData = [];
+  for (let i = dataStart; i < rows.length; i++) {
+    const r = rows[i];
+    if (!r || r.every(c => !String(c).trim())) continue;
+    chatData.push({
+      num:         chatData.length + 1,
+      tipo:        String(r[0]||'').trim() || 'Pedido pdte garantia',
+      archivo:     String(r[1]||'').trim(),
+      numPedido:   String(r[2]||'').trim(),
+      referencia:  String(r[3]||'').trim(),
+      denominacion:String(r[4]||'').trim(),
+      cantidad:    String(r[5]||'1').trim(),
+      fecha:       formatChatDate(r[6]),
+      numFactura:  String(r[7]||'').trim(),
+      vin:         String(r[8]||'').trim(),
+      codigo:      String(r[9]||'').trim(),
+    });
+  }
+
+  renderChatTable();
+  updateChatStats();
+  toast('✅ ' + chatData.length + ' registros cargados ✓', 'success');
+}
+
+function formatChatDate(val) {
+  if (!val) return '—';
+  if (val instanceof Date) return val.toLocaleDateString('es-ES');
+  const s = String(val).trim();
+  if (!s) return '—';
+  // Try to parse if it's a number (Excel serial date)
+  if (!isNaN(s) && s.length < 6) {
+    const d = new Date(Math.round((parseFloat(s) - 25569) * 86400 * 1000));
+    return d.toLocaleDateString('es-ES');
+  }
+  return s;
+}
+
+function renderChatTable() {
+  const tbody = document.getElementById('chatTableBody');
+  if (!chatData.length) {
+    tbody.innerHTML = '<tr><td colspan="11" class="chat-empty"><div class="chat-empty-icon">♻️</div>Sin datos cargados</td></tr>';
+    return;
+  }
+  tbody.innerHTML = chatData.map(r => `<tr>
+    <td style="text-align:center;font-weight:700;color:#a06000">${r.num}</td>
+    <td style="font-size:.7rem;color:var(--muted)">${esc(r.tipo)}</td>
+    <td><span class="chat-ref">${esc(r.archivo||'—')}</span></td>
+    <td><span class="chat-num">${esc(r.numPedido||'—')}</span></td>
+    <td><span class="chat-ref">${esc(r.referencia||'—')}</span></td>
+    <td style="max-width:160px;word-break:break-word">${esc(r.denominacion||'—')}</td>
+    <td style="text-align:center;font-weight:600">${esc(r.cantidad||'1')}</td>
+    <td style="white-space:nowrap">${esc(r.fecha||'—')}</td>
+    <td><span class="chat-num">${esc(r.numFactura||'—')}</span></td>
+    <td><span class="chat-num" style="font-size:.68rem">${esc(r.vin||'—')}</span></td>
+    <td style="text-align:center">${esc(r.codigo||'—')}</td>
+  </tr>`).join('');
+}
+
+function updateChatStats() {
+  document.getElementById('chatStats').style.display = 'flex';
+  document.getElementById('chatTotal').textContent    = chatData.length;
+  const refs = new Set(chatData.map(r => r.referencia).filter(Boolean));
+  document.getElementById('chatRefs').textContent     = refs.size;
+  const archs = new Set(chatData.map(r => r.archivo).filter(Boolean));
+  document.getElementById('chatArchivos').textContent = archs.size;
+}
+
+function limpiarChatarreo() {
+  if (!confirm('¿Limpiar toda la relación de chatarreo?')) return;
+  chatData = [];
+  renderChatTable();
+  document.getElementById('chatFileInfo').style.display = 'none';
+  document.getElementById('chatStats').style.display    = 'none';
+  document.getElementById('chatFileInput').value = '';
+  toast('Relación limpiada', 'info');
+}
+
+function exportarChatarreo() {
+  if (!chatData.length) { toast('No hay datos para exportar', 'error'); return; }
+  const BOM = '\uFEFF';
+  const sep = ';';
+  function qv(v) { return '"' + String(v||'').replace(/"/g,'""') + '"'; }
+  const headers = ['Nº','Tipo','Archivo','Nº Pedido','Referencia','Denominacion','Cantidad','Fecha','Nº Factura','VIN / Bastidor','Codigo'];
+  const rows = chatData.map(r => [r.num,r.tipo,r.archivo,r.numPedido,r.referencia,r.denominacion,r.cantidad,r.fecha,r.numFactura,r.vin,r.codigo].map(qv).join(sep));
+  const csv  = BOM + headers.map(qv).join(sep) + '\n' + rows.join('\n');
+  const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href = url;
+  a.download = 'MOTORSAN_Chatarreo_' + new Date().toLocaleDateString('es-ES').split('/').join('-') + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('📊 Exportado correctamente ✓', 'success');
 }
 
 // ── DUAL SCROLL SYNC ──
