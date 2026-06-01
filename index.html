@@ -316,6 +316,19 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
 /* panel chatarreo */
 .panel-chatarreo{display:none}
 
+/* ── CHATARREO TOGGLES ── */
+.chat-tog-wrap{display:flex;flex-direction:column;gap:4px;align-items:flex-start}
+.chat-tog-row{display:flex;align-items:center;gap:6px}
+.chat-tog{width:34px;height:18px;border-radius:20px;border:none;cursor:pointer;background:#d1d5db;position:relative;transition:background .2s;flex-shrink:0}
+.chat-tog::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .2s;box-shadow:0 1px 2px rgba(0,0,0,.2)}
+.chat-tog.on-alm{background:#1a7f4e}
+.chat-tog.on-alm::after{transform:translateX(16px)}
+.chat-tog.on-env{background:#a06000}
+.chat-tog.on-env::after{transform:translateX(16px)}
+.chat-date-lbl{font-size:.62rem;color:var(--muted2);font-family:var(--mono)}
+.chat-date-lbl.on-alm{color:#1a7f4e;font-weight:600}
+.chat-date-lbl.on-env{color:#a06000;font-weight:600}
+
 /* ── RESPONSIVE ── */
 @media(max-width:768px){
   .form-grid{grid-template-columns:1fr 1fr}
@@ -630,8 +643,8 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
         <!-- Stats -->
         <div class="chat-stats" id="chatStats" style="display:none">
           <div class="chat-stat"><div class="chat-stat-val" id="chatTotal">0</div><div class="chat-stat-lbl">Total piezas</div></div>
-          <div class="chat-stat"><div class="chat-stat-val" id="chatRefs">0</div><div class="chat-stat-lbl">Referencias distintas</div></div>
-          <div class="chat-stat"><div class="chat-stat-val" id="chatArchivos">0</div><div class="chat-stat-lbl">Archivos</div></div>
+          <div class="chat-stat"><div class="chat-stat-val" id="chatRefs">0</div><div class="chat-stat-lbl">Piezas distintas</div></div>
+          <div class="chat-stat"><div class="chat-stat-val" id="chatArchivos">0</div><div class="chat-stat-lbl">Nº Órdenes</div></div>
         </div>
 
         <!-- Tabla -->
@@ -640,20 +653,17 @@ tr.exported td{background:#faf5ff;color:var(--muted)}
             <thead>
               <tr>
                 <th style="width:40px">Nº</th>
-                <th>TIPO</th>
-                <th>ARCHIVO</th>
-                <th>Nº PEDIDO</th>
-                <th>REFERENCIA</th>
-                <th>DENOMINACIÓN</th>
-                <th>CANTIDAD</th>
-                <th>FECHA</th>
-                <th>Nº FACTURA</th>
-                <th>VIN / BASTIDOR</th>
-                <th>CÓDIGO</th>
+                <th>Nº ORDEN</th>
+                <th>Nº BASTIDOR (VIN)</th>
+                <th>Nº PIEZA</th>
+                <th>NOMBRE</th>
+                <th>PIEZA CAUSANTE</th>
+                <th style="min-width:140px">ALMACENADO</th>
+                <th style="min-width:140px">ENVIADO</th>
               </tr>
             </thead>
             <tbody id="chatTableBody">
-              <tr><td colspan="11" class="chat-empty"><div class="chat-empty-icon">♻️</div>Arrastra un fichero Excel para cargar la relación de piezas a chatarrear</td></tr>
+              <tr><td colspan="8" class="chat-empty"><div class="chat-empty-icon">♻️</div>Arrastra un fichero Excel para cargar la relación de piezas a chatarrear</td></tr>
             </tbody>
           </table>
         </div>
@@ -1612,6 +1622,7 @@ function actualizarQRBtns() {
 initFirebase();
 renderTabla();
 updateStats();
+loadChatData();
 
 // ── TIPO SELECTOR ──
 let tipoActual = 'garantia';
@@ -1955,30 +1966,51 @@ function parseChatCSV(text, filename) {
 function parseChatRows(rows, filename) {
   if (!rows.length) { toast('El fichero está vacío', 'error'); return; }
 
-  // Detect header row
+  // Detect header row and column positions
   let dataStart = 0;
-  const firstRow = rows[0].join(' ').toLowerCase();
-  if (firstRow.includes('pedido') || firstRow.includes('referencia') ||
-      firstRow.includes('tipo') || firstRow.includes('archivo')) {
-    dataStart = 1;
+  let colOrden = -1, colBastidor = -1, colPieza = -1, colNombre = -1, colCausante = -1;
+
+  // Search for header row in first 5 rows
+  for (let h = 0; h < Math.min(5, rows.length); h++) {
+    const row = rows[h].map(c => String(c||'').toLowerCase().trim());
+    const hasHeader = row.some(c =>
+      c.includes('orden') || c.includes('bastidor') ||
+      c.includes('pieza') || c.includes('nombre') || c.includes('causante')
+    );
+    if (hasHeader) {
+      dataStart = h + 1;
+      row.forEach((c, i) => {
+        if (c.includes('orden'))    colOrden    = i;
+        if (c.includes('bastidor') || c.includes('vin')) colBastidor = i;
+        if (c.includes('pieza') && !c.includes('causante')) colPieza = i;
+        if (c.includes('nombre') && !c.includes('pieza'))   colNombre = i;
+        if (c.includes('causante')) colCausante = i;
+      });
+      break;
+    }
+  }
+
+  // Fallback: if no header detected, assume fixed column order
+  // Nº Orden | Bastidor | Nº Pieza | Nombre | Pieza causante
+  if (colOrden === -1) {
+    colOrden = 0; colBastidor = 1; colPieza = 2; colNombre = 3; colCausante = 4;
   }
 
   chatData = [];
   for (let i = dataStart; i < rows.length; i++) {
     const r = rows[i];
     if (!r || r.every(c => !String(c).trim())) continue;
+    const orden    = colOrden    >= 0 ? String(r[colOrden]   ||'').trim() : '';
+    const bastidor = colBastidor >= 0 ? String(r[colBastidor]||'').trim() : '';
+    const pieza    = colPieza    >= 0 ? String(r[colPieza]   ||'').trim() : '';
+    const nombre   = colNombre   >= 0 ? String(r[colNombre]  ||'').trim() : '';
+    const causante = colCausante >= 0 ? String(r[colCausante]||'').trim() : '';
+    if (!orden && !bastidor && !pieza) continue; // skip empty rows
     chatData.push({
-      num:         chatData.length + 1,
-      tipo:        String(r[0]||'').trim() || 'Pedido pdte garantia',
-      archivo:     String(r[1]||'').trim(),
-      numPedido:   String(r[2]||'').trim(),
-      referencia:  String(r[3]||'').trim(),
-      denominacion:String(r[4]||'').trim(),
-      cantidad:    String(r[5]||'1').trim(),
-      fecha:       formatChatDate(r[6]),
-      numFactura:  String(r[7]||'').trim(),
-      vin:         String(r[8]||'').trim(),
-      codigo:      String(r[9]||'').trim(),
+      num: chatData.length + 1,
+      orden, bastidor, pieza, nombre, causante,
+      almacenado: false, fechaAlmacenado: '',
+      enviado: false, fechaEnviado: ''
     });
   }
 
@@ -2003,36 +2035,79 @@ function formatChatDate(val) {
 function renderChatTable() {
   const tbody = document.getElementById('chatTableBody');
   if (!chatData.length) {
-    tbody.innerHTML = '<tr><td colspan="11" class="chat-empty"><div class="chat-empty-icon">♻️</div>Sin datos cargados</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="8" class="chat-empty"><div class="chat-empty-icon">♻️</div>Sin datos cargados</td></tr>';
     return;
   }
-  tbody.innerHTML = chatData.map(r => `<tr>
-    <td style="text-align:center;font-weight:700;color:#a06000">${r.num}</td>
-    <td style="font-size:.7rem;color:var(--muted)">${esc(r.tipo)}</td>
-    <td><span class="chat-ref">${esc(r.archivo||'—')}</span></td>
-    <td><span class="chat-num">${esc(r.numPedido||'—')}</span></td>
-    <td><span class="chat-ref">${esc(r.referencia||'—')}</span></td>
-    <td style="max-width:160px;word-break:break-word">${esc(r.denominacion||'—')}</td>
-    <td style="text-align:center;font-weight:600">${esc(r.cantidad||'1')}</td>
-    <td style="white-space:nowrap">${esc(r.fecha||'—')}</td>
-    <td><span class="chat-num">${esc(r.numFactura||'—')}</span></td>
-    <td><span class="chat-num" style="font-size:.68rem">${esc(r.vin||'—')}</span></td>
-    <td style="text-align:center">${esc(r.codigo||'—')}</td>
+  tbody.innerHTML = chatData.map((r,i) => `<tr>
+    <td style="text-align:center;font-weight:700;color:#a06000;width:40px">${r.num}</td>
+    <td><span class="chat-ref">${esc(r.orden||'—')}</span></td>
+    <td><span class="chat-num" style="font-size:.7rem">${esc(r.bastidor||'—')}</span></td>
+    <td><span class="chat-ref">${esc(r.pieza||'—')}</span></td>
+    <td style="max-width:180px;word-break:break-word">${esc(r.nombre||'—')}</td>
+    <td style="max-width:180px;word-break:break-word;color:#5c3a00;font-weight:500">${esc(r.causante||'—')}</td>
+    <td>
+      <div class="chat-tog-wrap">
+        <div class="chat-tog-row">
+          <button class="chat-tog ${r.almacenado?'on-alm':''}" onclick="toggleChatAlm(${i})" title="Marcar almacenado"></button>
+          <span class="chat-date-lbl ${r.almacenado?'on-alm':''}">${r.almacenado ? '✓ '+r.fechaAlmacenado : 'No almacenado'}</span>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div class="chat-tog-wrap">
+        <div class="chat-tog-row">
+          <button class="chat-tog ${r.enviado?'on-env':''}" onclick="toggleChatEnv(${i})" title="Marcar enviado"></button>
+          <span class="chat-date-lbl ${r.enviado?'on-env':''}">${r.enviado ? '✓ '+r.fechaEnviado : 'No enviado'}</span>
+        </div>
+      </div>
+    </td>
   </tr>`).join('');
 }
 
 function updateChatStats() {
   document.getElementById('chatStats').style.display = 'flex';
   document.getElementById('chatTotal').textContent    = chatData.length;
-  const refs = new Set(chatData.map(r => r.referencia).filter(Boolean));
-  document.getElementById('chatRefs').textContent     = refs.size;
-  const archs = new Set(chatData.map(r => r.archivo).filter(Boolean));
-  document.getElementById('chatArchivos').textContent = archs.size;
+  const piezas = new Set(chatData.map(r => r.pieza).filter(Boolean));
+  document.getElementById('chatRefs').textContent     = piezas.size;
+  const ordenes = new Set(chatData.map(r => r.orden).filter(Boolean));
+  document.getElementById('chatArchivos').textContent = ordenes.size;
+}
+
+function toggleChatAlm(idx) {
+  if (!chatData[idx]) return;
+  chatData[idx].almacenado = !chatData[idx].almacenado;
+  chatData[idx].fechaAlmacenado = chatData[idx].almacenado
+    ? new Date().toLocaleDateString('es-ES') : '';
+  saveChatData();
+  renderChatTable();
+  toast(chatData[idx].almacenado ? '📦 Marcado como almacenado' : 'Desmarcado de almacenado', 'info');
+}
+
+function toggleChatEnv(idx) {
+  if (!chatData[idx]) return;
+  chatData[idx].enviado = !chatData[idx].enviado;
+  chatData[idx].fechaEnviado = chatData[idx].enviado
+    ? new Date().toLocaleDateString('es-ES') : '';
+  saveChatData();
+  renderChatTable();
+  toast(chatData[idx].enviado ? '📤 Marcado como enviado' : 'Desmarcado de enviado', 'info');
+}
+
+// Persist chatData in localStorage
+function saveChatData() {
+  try { localStorage.setItem('motorsan_chatarreo_v1', JSON.stringify(chatData)); } catch {}
+}
+function loadChatData() {
+  try {
+    const d = localStorage.getItem('motorsan_chatarreo_v1');
+    if (d) { chatData = JSON.parse(d); renderChatTable(); updateChatStats(); }
+  } catch {}
 }
 
 function limpiarChatarreo() {
   if (!confirm('¿Limpiar toda la relación de chatarreo?')) return;
   chatData = [];
+  localStorage.removeItem('motorsan_chatarreo_v1');
   renderChatTable();
   document.getElementById('chatFileInfo').style.display = 'none';
   document.getElementById('chatStats').style.display    = 'none';
@@ -2045,8 +2120,8 @@ function exportarChatarreo() {
   const BOM = '\uFEFF';
   const sep = ';';
   function qv(v) { return '"' + String(v||'').replace(/"/g,'""') + '"'; }
-  const headers = ['Nº','Tipo','Archivo','Nº Pedido','Referencia','Denominacion','Cantidad','Fecha','Nº Factura','VIN / Bastidor','Codigo'];
-  const rows = chatData.map(r => [r.num,r.tipo,r.archivo,r.numPedido,r.referencia,r.denominacion,r.cantidad,r.fecha,r.numFactura,r.vin,r.codigo].map(qv).join(sep));
+  const headers = ['Nº','Nº Orden','Nº Bastidor (VIN)','Nº Pieza','Nombre','Pieza Causante','Almacenado','Fecha Almacenado','Enviado','Fecha Enviado'];
+  const rows = chatData.map(r => [r.num,r.orden,r.bastidor,r.pieza,r.nombre,r.causante,r.almacenado?'Si':'No',r.fechaAlmacenado||'',r.enviado?'Si':'No',r.fechaEnviado||''].map(qv).join(sep));
   const csv  = BOM + headers.map(qv).join(sep) + '\n' + rows.join('\n');
   const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
   const url  = URL.createObjectURL(blob);
